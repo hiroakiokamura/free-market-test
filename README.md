@@ -1,6 +1,6 @@
 ## 環境構築
 
-1. `git clone git@github.com:hiroakiokamura/confirm-test1.git`
+1. `git clone git@github.com:hiroakiokamura/freemarket-test1.git`
 2. DockerDesktop を起動し`docker-compose up -d --build`
 3. `cd src`
 4. `docker-compose exec php composer install`

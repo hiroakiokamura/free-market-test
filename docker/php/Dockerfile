@@ -1,24 +1,65 @@
-FROM php:8.3.12-fpm
+FROM php:8.3-fpm
 
-# 必要なパッケージをインストールし、PHP拡張モジュールを有効化
-RUN apt update \
-    && apt install -y --no-install-recommends \
-    default-mysql-client \
-    zlib1g-dev \
-    libzip-dev \
-    unzip \
-    libcurl4-openssl-dev \
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    libpng-dev \
     libonig-dev \
-    && docker-php-ext-install pdo_mysql zip curl mbstring \
-    && apt clean \
-    && rm -rf /var/lib/apt/lists/*
+    libxml2-dev \
+    zip \
+    unzip \
+    libzip-dev \
+    default-mysql-client \
+    default-libmysqlclient-dev \
+    libcurl4-openssl-dev
 
-# Composerのインストールを追加
-RUN curl -sS https://getcomposer.org/installer | php \
-    && mv composer.phar /usr/local/bin/composer
+# Clear cache
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# 作業ディレクトリの設定
-WORKDIR /var/www/html
+# Configure and install PHP extensions
+RUN docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd && \
+    docker-php-ext-configure mysqli --with-mysqli=mysqlnd && \
+    docker-php-ext-install -j$(nproc) \
+    pdo \
+    pdo_mysql \
+    mysqli \
+    mbstring \
+    exif \
+    pcntl \
+    bcmath \
+    gd \
+    zip \
+    curl
 
-# カスタムphp.iniの配置
+# Get latest Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Create system user
+RUN useradd -m -u 1000 hiroakiokamura && \
+    usermod -a -G www-data hiroakiokamura
+
+# Set working directory
+WORKDIR /var/www
+
+# Copy custom php.ini
 COPY php.ini /usr/local/etc/php/
+
+# Create storage directory structure
+RUN mkdir -p /var/www/storage/logs \
+    /var/www/storage/framework/sessions \
+    /var/www/storage/framework/views \
+    /var/www/storage/framework/cache
+
+# Set permissions
+RUN chown -R hiroakiokamura:www-data /var/www && \
+    chmod -R 775 /var/www && \
+    chmod -R 777 /var/www/storage
+
+# Verify PHP extensions
+RUN php -m | grep -i pdo
+RUN php -m | grep -i mysqli
+RUN php -m | grep -i mysqlnd
+
+# Switch to hiroakiokamura user
+USER hiroakiokamura
