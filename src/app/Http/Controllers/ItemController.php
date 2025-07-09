@@ -4,15 +4,27 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Item;
+use App\Models\Category;
 
 class ItemController extends Controller
 {
     /**
      * トップページの商品一覧を表示
      */
-    public function index()
+    public function index(Request $request)
     {
-        $items = Item::latest()->paginate(20);
+        $query = Item::latest();
+
+        // 検索キーワードが存在する場合
+        if ($request->has('search')) {
+            $searchTerm = $request->search;
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('name', 'like', '%' . $searchTerm . '%')
+                  ->orWhere('description', 'like', '%' . $searchTerm . '%');
+            });
+        }
+
+        $items = $query->paginate(20);
         return view('items.index', compact('items'));
     }
 
@@ -30,7 +42,7 @@ class ItemController extends Controller
      */
     public function show($item_id)
     {
-        $item = Item::findOrFail($item_id);
+        $item = Item::with('categories')->findOrFail($item_id);
         return view('items.show', compact('item'));
     }
 
@@ -39,7 +51,8 @@ class ItemController extends Controller
      */
     public function create()
     {
-        return view('items.create');
+        $categories = Category::all();
+        return view('items.create', compact('categories'));
     }
 
     /**
@@ -47,26 +60,34 @@ class ItemController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
             'name' => 'required|string|max:255',
+            'brand_name' => 'nullable|string|max:255',
             'description' => 'required|string',
-            'price' => 'required|numeric|min:0',
+            'price' => 'required|numeric|min:1',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'condition' => 'required|in:new,like_new,good,fair,poor',
+            'category_ids' => 'required|array|min:1',
+            'category_ids.*' => 'exists:categories,id',
         ]);
 
-        $item = new Item();
-        $item->name = $validated['name'];
-        $item->description = $validated['description'];
-        $item->price = $validated['price'];
-        $item->user_id = auth()->id();
-        
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('items', 'public');
-            $item->image_path = $path;
-        }
+        $imagePath = $request->file('image')->store('items', 'public');
 
-        $item->save();
+        $item = Item::create([
+            'user_id' => auth()->id(),
+            'name' => $request->name,
+            'brand_name' => $request->brand_name,
+            'description' => $request->description,
+            'price' => $request->price,
+            'image_path' => $imagePath,
+            'condition' => $request->condition,
+            'status' => 'on_sale',
+        ]);
 
-        return redirect()->route('item.show', $item->id)->with('success', '商品を出品しました。');
+        // カテゴリーを関連付け
+        $item->categories()->attach($request->category_ids);
+
+        return redirect()->route('item.show', $item)
+            ->with('success', '商品を出品しました。');
     }
 } 

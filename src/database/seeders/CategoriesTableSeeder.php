@@ -15,14 +15,24 @@ class CategoriesTableSeeder extends Seeder
     public function run(): void
     {
         $categories = [
-            ['content' => '商品のお届けについて'],
-            ['content' => '商品の交換について'],
-            ['content' => '商品トラブル'],
-            ['content' => 'ショップへのお問い合わせ'],
-            ['content' => 'その他'],
+            'ファッション',
+            '家電',
+            'インテリア',
+            'レディース',
+            'メンズ',
+            'コスメ',
+            '本',
+            'ゲーム',
+            'スポーツ',
+            'キッチン',
+            'ハンドメイド',
+            'アクセサリー',
+            'おもちゃ',
+            'ベビー・キッズ',
         ];
+
         foreach ($categories as $category) {
-            DB::table('categories')->insert($category);
+            Category::create(['content' => $category]);
         }
     }
 }

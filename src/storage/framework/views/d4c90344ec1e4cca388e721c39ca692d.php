@@ -1,93 +1,81 @@
 <?php $__env->startSection('title', '商品の購入'); ?>
 
 <?php $__env->startSection('content'); ?>
+<div class="container mx-auto px-4 py-8">
     <div class="max-w-4xl mx-auto">
-        <h1 class="text-2xl font-bold text-gray-800 mb-6">商品の購入</h1>
-
-        <div class="bg-white rounded-lg shadow-lg overflow-hidden mb-6">
-            <div class="p-6">
-                <div class="md:flex">
-                    <div class="md:w-1/3 mb-4 md:mb-0">
-                        <img src="<?php echo e(Storage::url($item->image_path)); ?>" alt="<?php echo e($item->name); ?>" class="w-full h-48 object-cover rounded">
-                    </div>
-                    <div class="md:w-2/3 md:pl-6">
-                        <h2 class="text-xl font-bold text-gray-800 mb-2"><?php echo e($item->name); ?></h2>
-                        <p class="text-2xl font-bold text-gray-800 mb-4">¥<?php echo e(number_format($item->price)); ?></p>
-                        <p class="text-gray-600 mb-4"><?php echo e($item->description); ?></p>
-                        <p class="text-sm text-gray-500">出品者: <?php echo e($item->seller->name); ?></p>
-                    </div>
-                </div>
+        <!-- 商品情報 -->
+        <div class="flex mb-8">
+            <!-- 商品画像 -->
+            <div class="w-32 h-32 flex-shrink-0">
+                <img src="<?php echo e(Storage::url($item->image_path)); ?>" alt="<?php echo e($item->name); ?>" class="w-full h-full object-cover rounded-lg">
+            </div>
+            <!-- 商品名と価格 -->
+            <div class="ml-4">
+                <h1 class="text-xl mb-2"><?php echo e($item->name); ?></h1>
+                <p class="text-xl">¥ <?php echo e(number_format($item->price)); ?></p>
             </div>
         </div>
 
-        <div class="bg-white rounded-lg shadow-lg p-6">
-            <h2 class="text-xl font-bold text-gray-800 mb-6">配送先情報</h2>
-
-            <?php if($errors->any()): ?>
-                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-                    <ul class="list-disc list-inside">
-                        <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <li><?php echo e($error); ?></li>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    </ul>
-                </div>
-            <?php endif; ?>
-
-            <form action="<?php echo e(route('purchase.address.update', $item->id)); ?>" method="POST">
-                <?php echo csrf_field(); ?>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label for="postal_code" class="block text-sm font-medium text-gray-700 mb-2">郵便番号</label>
-                        <input type="text" name="postal_code" id="postal_code" 
-                            value="<?php echo e(old('postal_code', auth()->user()->postal_code)); ?>"
-                            class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
-                            required pattern="\d{7}" placeholder="1234567">
-                    </div>
-
-                    <div>
-                        <label for="prefecture" class="block text-sm font-medium text-gray-700 mb-2">都道府県</label>
-                        <input type="text" name="prefecture" id="prefecture" 
-                            value="<?php echo e(old('prefecture', auth()->user()->prefecture)); ?>"
-                            class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
-                            required>
-                    </div>
-
-                    <div>
-                        <label for="city" class="block text-sm font-medium text-gray-700 mb-2">市区町村</label>
-                        <input type="text" name="city" id="city" 
-                            value="<?php echo e(old('city', auth()->user()->city)); ?>"
-                            class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
-                            required>
-                    </div>
-
-                    <div>
-                        <label for="address" class="block text-sm font-medium text-gray-700 mb-2">番地</label>
-                        <input type="text" name="address" id="address" 
-                            value="<?php echo e(old('address', auth()->user()->address)); ?>"
-                            class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200"
-                            required>
-                    </div>
-
-                    <div class="md:col-span-2">
-                        <label for="building" class="block text-sm font-medium text-gray-700 mb-2">建物名・部屋番号</label>
-                        <input type="text" name="building" id="building" 
-                            value="<?php echo e(old('building', auth()->user()->building)); ?>"
-                            class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200">
-                    </div>
-                </div>
-
-                <div class="mt-6 flex justify-end space-x-4">
-                    <a href="<?php echo e(route('item.show', $item->id)); ?>" 
-                        class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold">
-                        キャンセル
-                    </a>
-                    <button type="submit" 
-                        class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold">
-                        購入を確定する
-                    </button>
-                </div>
-            </form>
+        <!-- 支払い方法 -->
+        <div class="mb-8">
+            <h2 class="text-lg mb-4">支払い方法</h2>
+            <select name="payment_method" class="w-64 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-400">
+                <option value="" disabled selected>選択してください</option>
+                <option value="convenience_store">コンビニ払い</option>
+                <option value="credit_card">カード払い</option>
+            </select>
         </div>
+
+        <!-- 配送先 -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg">配送先</h2>
+                <a href="<?php echo e(route('purchase.address', $item->id)); ?>" class="text-blue-500 hover:text-blue-600">変更する</a>
+            </div>
+            <div class="border border-gray-200 rounded-lg p-4">
+                <p class="mb-2">〒 <?php echo e(auth()->user()->postal_code); ?></p>
+                <p class="mb-2"><?php echo e(auth()->user()->prefecture); ?><?php echo e(auth()->user()->city); ?><?php echo e(auth()->user()->address); ?></p>
+                <?php if(auth()->user()->building): ?>
+                    <p><?php echo e(auth()->user()->building); ?></p>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <!-- 金額情報 -->
+        <div class="border border-gray-200 rounded-lg p-4 mb-8">
+            <div class="flex justify-between mb-2">
+                <span>商品代金</span>
+                <span>¥ <?php echo e(number_format($item->price)); ?></span>
+            </div>
+            <div class="flex justify-between">
+                <span>支払い方法</span>
+                <span id="selected-payment">コンビニ払い</span>
+            </div>
+        </div>
+
+        <!-- 購入ボタン -->
+        <form action="<?php echo e(route('purchase.address.update', $item->id)); ?>" method="POST">
+            <?php echo csrf_field(); ?>
+            <button type="submit" class="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-3 rounded-lg transition-colors">
+                購入する
+            </button>
+        </form>
     </div>
+</div>
+
+<?php $__env->startPush('scripts'); ?>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const paymentSelect = document.querySelector('select[name="payment_method"]');
+    const selectedPayment = document.getElementById('selected-payment');
+
+    paymentSelect.addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
+        selectedPayment.textContent = selectedOption.text;
+    });
+});
+</script>
+<?php $__env->stopPush(); ?>
+
 <?php $__env->stopSection(); ?> 
 <?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /var/www/resources/views/purchase/show.blade.php ENDPATH**/ ?>
