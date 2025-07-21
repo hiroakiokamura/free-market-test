@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\Purchase;
+use Stripe\Stripe;
+use Stripe\PaymentIntent;
+use Stripe\Exception\ApiErrorException;
 
 class PurchaseController extends Controller
 {
@@ -23,7 +26,12 @@ class PurchaseController extends Controller
     public function showAddress($item_id)
     {
         $item = Item::findOrFail($item_id);
-        return view('purchase.address', compact('item'));
+        $user = auth()->user();
+        
+        // 現在の住所を結合（nullの場合は空文字を使用）
+        $currentAddress = ($user->prefecture ?? '') . ($user->city ?? '') . ($user->address ?? '');
+        
+        return view('purchase.address', compact('item', 'currentAddress'));
     }
 
     /**
@@ -40,6 +48,13 @@ class PurchaseController extends Controller
         // 住所を都道府県、市区町村、番地に分割
         $addressParts = $this->parseAddress($validated['address']);
 
+        // 都道府県が見つからない場合はエラー
+        if (empty($addressParts['prefecture'])) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['address' => '正しい都道府県名から入力してください。']);
+        }
+
         $user = auth()->user();
         $user->update([
             'postal_code' => $validated['postal_code'],
@@ -49,8 +64,210 @@ class PurchaseController extends Controller
             'building' => $validated['building'],
         ]);
 
+        // 更新後のユーザー情報を再取得
+        $user->refresh();
+
         return redirect()->route('purchase.show', $item_id)
             ->with('success', '送付先住所を更新しました。');
+    }
+
+    /**
+     * 決済処理を実行
+     */
+    public function process(Request $request, $item_id)
+    {
+        $item = Item::findOrFail($item_id);
+        $user = auth()->user();
+
+        // メールアドレスの形式を確認
+        if (!filter_var($user->email, FILTER_VALIDATE_EMAIL)) {
+            return redirect()->back()
+                ->with('error', '有効なメールアドレスが設定されていません。プロフィールから正しいメールアドレスを設定してください。');
+        }
+
+        // 在庫確認
+        if (!$item->isOnSale()) {
+            return redirect()->back()->with('error', 'この商品は既に売り切れです。');
+        }
+
+        try {
+            // 金額を整数に変換（小数点以下を削除）
+            $amount = (int)$item->price;
+
+            \Log::info('Stripe決済開始: ', [
+                'payment_method' => $request->payment_method,
+                'amount' => $amount,
+                'original_price' => $item->price,
+                'user_id' => $user->id,
+                'item_id' => $item->id,
+                'user_email' => $user->email
+            ]);
+
+            Stripe::setApiKey(config('services.stripe.secret'));
+            \Log::info('Stripe APIキー設定完了');
+
+            if ($request->payment_method === 'card') {
+                // カード決済の場合
+                if (!$request->payment_method_id) {
+                    return redirect()->back()->with('error', 'カード情報が正しく送信されませんでした。');
+                }
+
+                $payment = PaymentIntent::create([
+                    'amount' => $amount,
+                    'currency' => 'jpy',
+                    'automatic_payment_methods' => [
+                        'enabled' => true,
+                        'allow_redirects' => 'never'
+                    ],
+                    'payment_method' => $request->payment_method_id,
+                    'confirm' => true,
+                    'return_url' => route('purchase.complete', $item->id),
+                    'metadata' => [
+                        'item_id' => $item->id,
+                        'user_id' => $user->id
+                    ]
+                ]);
+
+                \Log::info('カード決済PaymentIntent作成完了', [
+                    'payment_intent_id' => $payment->id,
+                    'status' => $payment->status
+                ]);
+            } else {
+                // コンビニ決済の場合
+                \Log::info('コンビニ決済処理開始');
+                
+                // 名前を適切なフォーマットに変換（全角スペースを半角に）
+                $userName = str_replace('　', ' ', $user->name);
+                
+                $paymentData = [
+                    'amount' => $amount,
+                    'currency' => 'jpy',
+                    'payment_method_types' => ['konbini'],
+                    'payment_method_data' => [
+                        'type' => 'konbini',
+                        'billing_details' => [
+                            'email' => trim($user->email),
+                            'name' => trim($userName)
+                        ]
+                    ],
+                    'confirm' => true,
+                    'return_url' => route('purchase.complete', $item->id),
+                    'metadata' => [
+                        'item_id' => $item->id,
+                        'user_id' => $user->id
+                    ]
+                ];
+                \Log::info('コンビニ決済パラメータ: ', $paymentData);
+
+                $payment = PaymentIntent::create($paymentData);
+                \Log::info('PaymentIntent作成完了: ', ['payment_id' => $payment->id]);
+            }
+
+            // 購入情報を保存
+            $purchase = Purchase::create([
+                'user_id' => $user->id,
+                'item_id' => $item->id,
+                'price' => $item->price,
+                'shipping_postal_code' => $user->postal_code ?? null,
+                'shipping_prefecture' => $user->prefecture ?? null,
+                'shipping_city' => $user->city ?? null,
+                'shipping_address' => $user->address ?? null,
+                'shipping_building' => $user->building,  // buildingは元々nullable
+                'payment_intent_id' => $payment->id,
+                'payment_method' => $request->payment_method,
+                'status' => $request->payment_method === 'card' ? 'completed' : 'pending'
+            ]);
+
+            // 商品を売り切れ状態に更新
+            $item->update(['status' => 'sold_out']);
+
+            if ($request->payment_method === 'konbini') {
+                // コンビニ決済の場合は購入履歴画面へ
+                return redirect()->route('profile.purchases')
+                               ->with('success', 'コンビニ決済の支払い情報が発行されました。');
+            }
+
+            return redirect()->route('profile.purchases')
+                           ->with('success', '商品の購入が完了しました。');
+
+        } catch (ApiErrorException $e) {
+            \Log::error('Stripeエラー詳細: ', [
+                'message' => $e->getMessage(),
+                'code' => $e->getStripeCode(),
+                'http_status' => $e->getHttpStatus(),
+                'request_id' => $e->getRequestId(),
+                'error' => $e->getError()
+            ]);
+            return redirect()->back()
+                           ->with('error', '決済処理中にエラーが発生しました：' . $e->getMessage());
+        } catch (\Exception $e) {
+            \Log::error('決済エラー詳細: ', [
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return redirect()->back()
+                           ->with('error', '決済処理中にエラーが発生しました：' . $e->getMessage());
+        }
+    }
+
+    /**
+     * 決済完了処理
+     */
+    public function complete(Request $request, $item_id)
+    {
+        try {
+            $payment_intent_id = $request->query('payment_intent');
+            if ($payment_intent_id) {
+                Stripe::setApiKey(config('services.stripe.secret'));
+                $payment_intent = PaymentIntent::retrieve($payment_intent_id);
+                
+                if ($payment_intent->status === 'succeeded') {
+                    // 購入情報のステータスを更新
+                    Purchase::where('payment_intent_id', $payment_intent_id)
+                           ->update(['status' => 'completed']);
+                           
+                    return redirect()->route('profile.purchases')
+                                   ->with('success', '商品の購入が完了しました。');
+                }
+            }
+            
+            return redirect()->route('purchase.show', $item_id)
+                           ->with('error', '決済処理が完了していません。');
+                           
+        } catch (\Exception $e) {
+            \Log::error('決済完了処理エラー: ', [
+                'message' => $e->getMessage(),
+                'payment_intent_id' => $payment_intent_id ?? null
+            ]);
+            
+            return redirect()->route('purchase.show', $item_id)
+                           ->with('error', '決済処理の確認中にエラーが発生しました。');
+        }
+    }
+
+    /**
+     * コンビニ決済の支払い情報を表示
+     */
+    public function showKonbini(Request $request)
+    {
+        $payment = session('payment');
+        $purchase = session('purchase');
+
+        if (!$payment || !$purchase) {
+            return redirect()->route('home')
+                ->with('error', '支払い情報が見つかりませんでした。');
+        }
+
+        // セッションから取得したデータを適切なオブジェクトに変換
+        $payment = json_decode(json_encode($payment));
+        $purchase = json_decode(json_encode($purchase));
+
+        return view('purchase.konbini', [
+            'payment' => $payment,
+            'purchase' => $purchase
+        ]);
     }
 
     /**
@@ -74,21 +291,22 @@ class PurchaseController extends Controller
         foreach ($prefectures as $pref) {
             if (strpos($address, $pref) === 0) {
                 $prefecture = $pref;
-                $address = substr($address, strlen($pref));
                 break;
             }
         }
 
-        // 残りの住所を市区町村と番地に分割（簡易的な実装）
-        $remainingParts = explode('市', $address, 2);
-        if (count($remainingParts) === 2) {
-            $city = $remainingParts[0] . '市';
-            $street = trim($remainingParts[1]);
+        // 都道府県を除去
+        $remainingAddress = trim(substr($address, strlen($prefecture)));
+
+        // 市区町村と番地を分割（最初の数字が出てくる位置で分割）
+        $city = '';
+        $street = '';
+        if (preg_match('/^(.+?)([0-9].*)$/', $remainingAddress, $matches)) {
+            $city = trim($matches[1]);
+            $street = trim($matches[2]);
         } else {
-            // 市で分割できない場合は、最初の数字が出てくる位置で分割
-            preg_match('/^([^\d]+)(.*)/u', $address, $matches);
-            $city = $matches[1] ?? '';
-            $street = $matches[2] ?? $address;
+            // 数字が見つからない場合は全て市区町村として扱う
+            $city = $remainingAddress;
         }
 
         return [

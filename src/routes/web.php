@@ -8,6 +8,8 @@ use App\Http\Controllers\AdminFormController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\LikeController;
 
 // PG01: トップ画面
 Route::get('/', [ItemController::class, 'index'])->name('home');
@@ -33,8 +35,13 @@ Route::get('/item/{item_id}', [ItemController::class, 'show'])->name('item.show'
 
 // 認証が必要なルート
 Route::middleware(['auth'])->group(function () {
-    // PG06: 商品購入画面
-    Route::get('/purchase/{item_id}', [PurchaseController::class, 'show'])->name('purchase.show');
+    // 商品購入関連
+    Route::get('/purchase/{item}', [PurchaseController::class, 'show'])->name('purchase.show');
+    Route::post('/purchase/{item}', [PurchaseController::class, 'process'])->name('purchase.process');
+    Route::get('/purchase/{item}/address', [PurchaseController::class, 'showAddress'])->name('purchase.address');
+    Route::post('/purchase/{item}/address', [PurchaseController::class, 'updateAddress'])->name('purchase.update_address');
+    Route::get('/purchase/{item}/complete', [PurchaseController::class, 'complete'])->name('purchase.complete');
+    Route::get('/purchase/konbini', [PurchaseController::class, 'showKonbini'])->name('purchase.konbini');
     
     // PG07: 送付先住所変更画面
     Route::get('/purchase/address/{item_id}', [PurchaseController::class, 'showAddress'])->name('purchase.address');
@@ -68,3 +75,8 @@ Route::post('/confirm', [ContactController::class, 'confirm'])->name('confirm');
 Route::post('/thanks', [ContactController::class, 'store'])->name('store');
 Route::get('/contact/export', [AdminFormController::class, 'export'])->name('contact.export');
 Route::delete('/contact/{id}', [AdminFormController::class, 'destroy'])->name('contact.destroy');
+
+Route::post('/items/{item}/comments', [CommentController::class, 'store'])->name('comments.store');
+
+// いいね機能のルート
+Route::post('/items/{item}/like', [LikeController::class, 'toggle'])->name('items.like');

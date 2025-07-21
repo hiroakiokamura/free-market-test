@@ -63,15 +63,15 @@ class ProfileController extends Controller
     }
 
     /**
-     * 購入した商品一覧を表示
+     * 購入履歴を表示
      */
     public function purchases()
     {
-        $purchases = Purchase::where('user_id', auth()->id())
+        $purchases = auth()->user()->purchases()
             ->with('item')
-            ->latest()
-            ->paginate(20);
-        
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
         return view('profile.purchases', compact('purchases'));
     }
 
