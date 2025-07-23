@@ -7,9 +7,14 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <?php $__currentLoopData = $items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            <div class="bg-white rounded-lg shadow overflow-hidden">
+            <div class="bg-white rounded-lg shadow overflow-hidden relative">
                 <a href="<?php echo e(route('item.show', $item->id)); ?>">
                     <img src="<?php echo e(Storage::url($item->image_path)); ?>" alt="<?php echo e($item->name); ?>" class="w-full h-48 object-cover">
+                    <?php if($item->status === 'sold_out'): ?>
+                        <div class="absolute top-0 right-0 bg-red-500 text-white px-3 py-1 m-2 rounded-md">
+                            SOLD
+                        </div>
+                    <?php endif; ?>
                     <div class="p-4">
                         <h2 class="text-lg font-semibold text-gray-800 mb-2"><?php echo e($item->name); ?></h2>
                         <p class="text-gray-600 mb-2 line-clamp-2"><?php echo e($item->description); ?></p>

@@ -22,6 +22,8 @@ class User extends Authenticatable
         'email',
         'password',
         'postal_code',
+        'prefecture',
+        'city',
         'address',
         'building',
         'profile_photo_path'

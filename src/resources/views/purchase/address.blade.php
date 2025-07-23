@@ -17,8 +17,7 @@
                        name="postal_code" 
                        id="postal_code" 
                        value="{{ old('postal_code', auth()->user()->postal_code) }}"
-                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-400"
-                       required>
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-400">
                 @error('postal_code')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
@@ -30,8 +29,9 @@
                 <input type="text" 
                        name="address" 
                        id="address"
-                       value="{{ old('address', auth()->user()->prefecture . auth()->user()->city . auth()->user()->address) }}"
+                       value="{{ old('address', $currentAddress) }}"
                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-400"
+                       placeholder="例：渋谷区神南1-2-3"
                        required>
                 @error('address')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>

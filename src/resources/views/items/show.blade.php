@@ -43,24 +43,24 @@
             </div>
         @endif
 
-        <div class="md:flex md:space-x-8">
+        <div class="md:flex md:space-x-16">
             <!-- 商品画像 -->
-            <div class="md:w-1/2 mb-6 md:mb-0">
+            <div class="md:w-1/2 mb-12 md:mb-0">
                 <div class="bg-gray-100 aspect-square flex items-center justify-center rounded-lg">
-                    <img src="{{ Storage::url($item->image_path) }}" alt="{{ $item->name }}" class="max-h-full max-w-full object-contain">
+                    <img src="{{ Storage::url($item->image_path) }}" alt="{{ $item->name }}" class="max-h-full max-w-full object-contain p-4">
                 </div>
             </div>
 
             <!-- 商品情報 -->
             <div class="md:w-1/2">
                 <!-- 商品名とブランド名 -->
-                <h1 class="text-2xl mb-2">{{ $item->name }}</h1>
+                <h1 class="text-2xl font-bold mb-4">{{ $item->name }}</h1>
                 @if($item->brand_name)
-                    <p class="text-gray-600 text-sm mb-4">{{ $item->brand_name }}</p>
+                    <p class="text-gray-600 text-sm mb-8">{{ $item->brand_name }}</p>
                 @endif
 
                 <!-- カテゴリー -->
-                <div class="flex flex-wrap gap-2 mb-4">
+                <div class="flex flex-wrap gap-2 mb-8">
                     @if($item->categories->isEmpty())
                         <p class="text-gray-500">カテゴリーが設定されていません</p>
                     @else
@@ -73,10 +73,10 @@
                 </div>
 
                 <!-- 価格 -->
-                <p class="text-2xl font-bold mb-4">¥{{ number_format($item->price) }} <span class="text-sm font-normal">(税込)</span></p>
+                <p class="text-3xl font-bold mb-8">¥{{ number_format($item->price) }} <span class="text-sm font-normal">(税込)</span></p>
 
                 <!-- お気に入りとコメント数 -->
-                <div class="flex items-center space-x-4 mb-4">
+                <div class="flex items-center space-x-6 mb-8">
                     <div class="flex items-center">
                         @auth
                             <button onclick="toggleLike({{ $item->id }})" 

@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Item extends Model
 {
@@ -11,7 +14,6 @@ class Item extends Model
 
     protected $fillable = [
         'user_id',
-        'category_id',
         'name',
         'brand_name',
         'description',
@@ -45,17 +47,6 @@ class Item extends Model
         return $this->status === 'on_sale';
     }
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    public function categories()
-    {
-        return $this->belongsToMany(Category::class, 'item_categories')
-                    ->withTimestamps();
-    }
-
     /**
      * 商品の状態を日本語で取得
      */
@@ -68,5 +59,47 @@ class Item extends Model
             'fair' => 'やや傷や汚れあり',
             'poor' => '傷や汚れあり',
         ][$this->condition] ?? $this->condition;
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * カテゴリーとの多対多リレーション
+     */
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'item_categories')
+                    ->withTimestamps();
+    }
+
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function getCommentsCountAttribute(): int
+    {
+        return $this->comments()->count();
+    }
+
+    public function likes(): HasMany
+    {
+        return $this->hasMany(Like::class);
+    }
+
+    public function getLikesCountAttribute(): int
+    {
+        return $this->likes()->count();
+    }
+
+    public function isLikedBy($user): bool
+    {
+        if (!$user) {
+            return false;
+        }
+        return $this->likes()->where('user_id', $user->id)->exists();
     }
 } 

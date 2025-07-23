@@ -70,10 +70,19 @@ class ItemController extends Controller
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'condition' => 'required|in:new,like_new,good,fair,poor',
             'category_ids' => 'required|array|min:1',
-            'category_ids.*' => 'exists:categories,id',
         ]);
 
         $imagePath = $request->file('image')->store('items', 'public');
+
+        // カテゴリー名を取得
+        $categoryNames = $request->category_ids;
+        
+        // 既存のカテゴリーを取得または新規作成
+        $categoryIds = [];
+        foreach ($categoryNames as $name) {
+            $category = Category::firstOrCreate(['name' => $name]);
+            $categoryIds[] = $category->id;
+        }
 
         $item = Item::create([
             'user_id' => auth()->id(),
@@ -87,7 +96,7 @@ class ItemController extends Controller
         ]);
 
         // カテゴリーを関連付け
-        $item->categories()->attach($request->category_ids);
+        $item->categories()->attach($categoryIds);
 
         return redirect()->route('item.show', $item)
             ->with('success', '商品を出品しました。');

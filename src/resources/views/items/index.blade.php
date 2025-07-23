@@ -9,9 +9,14 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         @foreach($items as $item)
-            <div class="bg-white rounded-lg shadow overflow-hidden">
+            <div class="bg-white rounded-lg shadow overflow-hidden relative">
                 <a href="{{ route('item.show', $item->id) }}">
                     <img src="{{ Storage::url($item->image_path) }}" alt="{{ $item->name }}" class="w-full h-48 object-cover">
+                    @if($item->status === 'sold_out')
+                        <div class="absolute top-0 right-0 bg-red-500 text-white px-3 py-1 m-2 rounded-md">
+                            SOLD
+                        </div>
+                    @endif
                     <div class="p-4">
                         <h2 class="text-lg font-semibold text-gray-800 mb-2">{{ $item->name }}</h2>
                         <p class="text-gray-600 mb-2 line-clamp-2">{{ $item->description }}</p>

@@ -15,8 +15,7 @@
                        name="postal_code" 
                        id="postal_code" 
                        value="<?php echo e(old('postal_code', auth()->user()->postal_code)); ?>"
-                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-400"
-                       required>
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-400">
                 <?php $__errorArgs = ['postal_code'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -35,8 +34,9 @@ unset($__errorArgs, $__bag); ?>
                 <input type="text" 
                        name="address" 
                        id="address"
-                       value="<?php echo e(old('address', auth()->user()->prefecture . auth()->user()->city . auth()->user()->address)); ?>"
+                       value="<?php echo e(old('address', $currentAddress)); ?>"
                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-400"
+                       placeholder="例：渋谷区神南1-2-3"
                        required>
                 <?php $__errorArgs = ['address'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');

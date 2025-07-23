@@ -17,7 +17,33 @@ class PurchaseController extends Controller
     public function show($item_id)
     {
         $item = Item::findOrFail($item_id);
-        return view('purchase.show', compact('item'));
+        $user = auth()->user();
+
+        // デバッグ情報をログに出力
+        \Log::info('User address info:', [
+            'user_id' => $user->id,
+            'postal_code' => $user->postal_code,
+            'city' => $user->city,
+            'address' => $user->address,
+            'building' => $user->building,
+        ]);
+
+        // 住所情報を取得（都道府県は任意）
+        $addressParts = array_filter([
+            $user->postal_code,
+            $user->city,
+            $user->address,
+            $user->building
+        ]);
+
+        // 住所が設定されているかチェック
+        if (empty($addressParts)) {
+            return redirect()->route('profile.edit')->with('error', '配送先住所を設定してください');
+        }
+
+        $address = implode(' ', $addressParts);
+
+        return view('purchase.show', compact('item', 'address'));
     }
 
     /**

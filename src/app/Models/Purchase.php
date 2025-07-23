@@ -18,7 +18,13 @@ class Purchase extends Model
         'shipping_city',
         'shipping_address',
         'shipping_building',
-        'status', // 'pending', 'completed', 'cancelled'
+        'payment_intent_id',
+        'payment_method',
+        'status'
+    ];
+
+    protected $dates = [
+        'paid_at'
     ];
 
     /**

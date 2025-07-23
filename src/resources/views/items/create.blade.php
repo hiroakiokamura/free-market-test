@@ -1,278 +1,278 @@
 @extends('layouts.app')
 
-@section('title', '商品を出品')
+@section('title', '商品の出品')
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const imageInput = document.getElementById('image');
+    const selectButton = document.getElementById('image-select-button');
+    const previewArea = document.getElementById('image-preview');
+    const previewImage = document.getElementById('preview-image');
+    const form = document.querySelector('form');
+
+    // 画像選択ボタンのクリックイベント
+    selectButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        imageInput.click();
+    });
+
+    // 画像が選択されたときの処理
+    imageInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImage.src = e.target.result;
+                previewArea.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // フォーム送信時の処理
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // 必須項目のチェック
+        const requiredFields = ['name', 'description', 'price', 'condition'];
+        let isValid = true;
+
+        requiredFields.forEach(field => {
+            const input = form.querySelector(`[name="${field}"]`);
+            if (!input.value) {
+                isValid = false;
+                const errorElement = document.createElement('p');
+                errorElement.className = 'text-red-500 text-sm mt-1';
+                errorElement.textContent = 'この項目は必須です';
+                input.parentElement.appendChild(errorElement);
+            }
+        });
+
+        // カテゴリーのチェック
+        const selectedCategories = form.querySelectorAll('input[name="category_ids[]"]:checked');
+        if (selectedCategories.length === 0) {
+            isValid = false;
+            const categoryError = document.createElement('p');
+            categoryError.className = 'text-red-500 text-sm mt-1';
+            categoryError.textContent = 'カテゴリーを1つ以上選択してください';
+            form.querySelector('.category-label').parentElement.appendChild(categoryError);
+        }
+
+        // 画像のチェック
+        if (!imageInput.files[0]) {
+            isValid = false;
+            const imageError = document.createElement('p');
+            imageError.className = 'text-red-500 text-sm mt-1';
+            imageError.textContent = '商品画像を選択してください';
+            imageInput.parentElement.appendChild(imageError);
+        }
+
+        if (isValid) {
+            form.submit();
+        }
+    });
+});
+</script>
+@endpush
 
 @section('content')
 <div class="container mx-auto px-4 py-8">
     <div class="max-w-2xl mx-auto">
-        <h2 class="text-xl font-bold text-center mb-8">商品の出品</h2>
-        
-        <form action="{{ route('item.store') }}" method="POST" enctype="multipart/form-data">
+        <h1 class="text-2xl font-bold text-center mb-8">商品の出品</h1>
+
+        <style>
+            .category-label input[type="checkbox"]:checked + span {
+                background-color: rgb(239 68 68);
+                color: white;
+            }
+            .category-label:hover span {
+                background-color: rgb(254 242 242);
+            }
+        </style>
+
+        <form action="{{ route('item.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
 
             <!-- 商品画像 -->
             <div class="mb-8">
-                <p class="text-base mb-2">商品画像</p>
-                <div id="dropArea" class="border-2 border-dashed border-gray-300 rounded-lg p-4 transition-colors duration-200 ease-in-out">
+                <h2 class="text-base mb-2">商品画像</h2>
+                <div class="border border-gray-300 rounded p-4">
+                    <input type="file" 
+                           name="image" 
+                           id="image"
+                           accept="image/*"
+                           class="hidden"
+                           required>
+                    
+                    <!-- プレビューエリア -->
+                    <div id="image-preview" class="hidden mb-4">
+                        <img id="preview-image" src="" alt="プレビュー" class="max-w-full h-auto max-h-64 mx-auto">
+                    </div>
+
+                    <!-- 画像選択ボタン -->
                     <div class="text-center">
-                        <input type="file" name="image" id="image" class="hidden" accept="image/*">
-                        <div id="preview" class="hidden mb-2">
-                            <div class="relative inline-block">
-                                <img src="" alt="プレビュー" class="w-24 h-24 object-cover rounded-lg">
-                                <button type="button" id="removeImage" class="absolute -top-2 -right-2 bg-white rounded-full p-1 shadow-md hover:bg-gray-100">
-                                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                        <div id="uploadPrompt">
-                            <svg class="mx-auto h-8 w-8 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                            <p class="text-gray-600 text-sm mb-2">ドラッグ＆ドロップ、または</p>
-                            <label for="image" class="cursor-pointer">
-                                <span class="inline-block text-red-500 border border-red-500 rounded-full px-4 py-1 text-sm hover:bg-red-50">
-                                    画像を選択する
-                                </span>
-                            </label>
-                            <p class="text-gray-500 text-xs mt-2">対応フォーマット: jpg, jpeg, png, gif</p>
-                        </div>
+                        <button type="button" 
+                                id="image-select-button"
+                                class="text-red-500 border border-red-500 rounded-full px-6 py-2 hover:bg-red-50 transition-colors duration-200">
+                            画像を選択する
+                        </button>
                     </div>
                 </div>
                 @error('image')
-                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>
 
             <!-- 商品の詳細 -->
             <div class="mb-8">
-                <h3 class="text-lg border-b pb-1 mb-4">商品の詳細</h3>
+                <h2 class="text-base mb-4">商品の詳細</h2>
 
                 <!-- カテゴリー -->
-                <div class="mb-6">
-                    <p class="text-base mb-2">カテゴリー（複数選択可）</p>
-                    <div class="flex flex-wrap gap-2" id="categoryContainer">
-                        @foreach([
-                            '1' => 'ファッション',
-                            '2' => '家電',
-                            '3' => 'インテリア',
-                            '4' => 'レディース',
-                            '5' => 'メンズ',
-                            '6' => 'コスメ',
-                            '7' => '本',
-                            '8' => 'ゲーム',
-                            '9' => 'スポーツ',
-                            '10' => 'キッチン',
-                            '11' => 'ハンドメイド',
-                            '12' => 'アクセサリー',
-                            '13' => 'おもちゃ',
-                            '14' => 'ベビー・キッズ'
-                        ] as $value => $label)
-                            <label class="category-label">
-                                <input type="checkbox" name="category_ids[]" value="{{ $value }}" class="hidden" 
-                                    {{ is_array(old('category_ids')) && in_array($value, old('category_ids')) ? 'checked' : '' }}>
-                                <span class="inline-block px-4 py-1 border rounded-full cursor-pointer transition-colors duration-200">
-                                    {{ $label }}
-                                </span>
-                            </label>
-                        @endforeach
+                <div class="mb-8">
+                    <h3 class="text-base mb-4">カテゴリー</h3>
+                    <div class="space-y-4 px-4">
+                        <!-- 1行目 -->
+                        <div class="flex flex-wrap gap-4">
+                            @foreach(['ファッション', '家電', 'インテリア', 'レディース', 'メンズ', 'コスメ'] as $category)
+                                <label class="category-label">
+                                    <input type="checkbox" 
+                                           name="category_ids[]" 
+                                           value="{{ $category }}"
+                                           class="hidden peer"
+                                           {{ in_array($category, old('category_ids', [])) ? 'checked' : '' }}>
+                                    <span class="inline-block px-6 py-2 rounded-full border border-red-500 text-red-500 text-sm cursor-pointer
+                                               hover:bg-red-50 transition-colors duration-200
+                                               peer-checked:bg-red-500 peer-checked:text-white">
+                                        {{ $category }}
+                                    </span>
+                                </label>
+                            @endforeach
+                        </div>
+                        <!-- 2行目 -->
+                        <div class="flex flex-wrap gap-4">
+                            @foreach(['本', 'ゲーム', 'スポーツ', 'キッチン', 'ハンドメイド', 'アクセサリー'] as $category)
+                                <label class="category-label">
+                                    <input type="checkbox" 
+                                           name="category_ids[]" 
+                                           value="{{ $category }}"
+                                           class="hidden peer"
+                                           {{ in_array($category, old('category_ids', [])) ? 'checked' : '' }}>
+                                    <span class="inline-block px-6 py-2 rounded-full border border-red-500 text-red-500 text-sm cursor-pointer
+                                               hover:bg-red-50 transition-colors duration-200
+                                               peer-checked:bg-red-500 peer-checked:text-white">
+                                        {{ $category }}
+                                    </span>
+                                </label>
+                            @endforeach
+                        </div>
+                        <!-- 3行目 -->
+                        <div class="flex flex-wrap gap-4">
+                            @foreach(['おもちゃ', 'ベビー・キッズ'] as $category)
+                                <label class="category-label">
+                                    <input type="checkbox" 
+                                           name="category_ids[]" 
+                                           value="{{ $category }}"
+                                           class="hidden peer"
+                                           {{ in_array($category, old('category_ids', [])) ? 'checked' : '' }}>
+                                    <span class="inline-block px-6 py-2 rounded-full border border-red-500 text-red-500 text-sm cursor-pointer
+                                               hover:bg-red-50 transition-colors duration-200
+                                               peer-checked:bg-red-500 peer-checked:text-white">
+                                        {{ $category }}
+                                    </span>
+                                </label>
+                            @endforeach
+                        </div>
                     </div>
                     @error('category_ids')
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <!-- 商品の状態 -->
-                <div>
-                    <label class="block text-base mb-2">商品の状態</label>
-                    <select name="condition" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-400">
-                        <option value="" disabled selected>選択してください</option>
-                        <option value="new">新品、未使用</option>
-                        <option value="like_new">未使用に近い</option>
-                        <option value="good">目立った傷や汚れなし</option>
-                        <option value="fair">やや傷や汚れあり</option>
-                        <option value="poor">傷や汚れあり</option>
+                <div class="mb-6">
+                    <h3 class="text-base mb-2">商品の状態</h3>
+                    <select name="condition" 
+                            class="w-full border border-gray-300 rounded p-2"
+                            required>
+                        <option value="">選択してください</option>
+                        <option value="new" {{ old('condition') == 'new' ? 'selected' : '' }}>新品・未使用</option>
+                        <option value="like_new" {{ old('condition') == 'like_new' ? 'selected' : '' }}>未使用に近い</option>
+                        <option value="good" {{ old('condition') == 'good' ? 'selected' : '' }}>目立った傷や汚れなし</option>
+                        <option value="fair" {{ old('condition') == 'fair' ? 'selected' : '' }}>やや傷や汚れあり</option>
+                        <option value="poor" {{ old('condition') == 'poor' ? 'selected' : '' }}>傷や汚れあり</option>
                     </select>
                     @error('condition')
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
 
             <!-- 商品名と説明 -->
             <div class="mb-8">
-                <h3 class="text-lg border-b pb-1 mb-4">商品名と説明</h3>
+                <h2 class="text-base mb-4">商品名と説明</h2>
 
                 <!-- 商品名 -->
                 <div class="mb-4">
-                    <label class="block text-base mb-2">商品名</label>
-                    <input type="text" name="name" value="{{ old('name') }}" 
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-400">
+                    <h3 class="text-base mb-2">商品名</h3>
+                    <input type="text" 
+                           name="name" 
+                           value="{{ old('name') }}"
+                           class="w-full border border-gray-300 rounded p-2"
+                           required>
                     @error('name')
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <!-- ブランド名 -->
                 <div class="mb-4">
-                    <label class="block text-base mb-2">ブランド名</label>
-                    <input type="text" name="brand_name" value="{{ old('brand_name') }}" 
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-400">
+                    <h3 class="text-base mb-2">ブランド名</h3>
+                    <input type="text" 
+                           name="brand_name" 
+                           value="{{ old('brand_name') }}"
+                           class="w-full border border-gray-300 rounded p-2">
                     @error('brand_name')
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
 
                 <!-- 商品の説明 -->
-                <div>
-                    <label class="block text-base mb-2">商品の説明</label>
-                    <textarea name="description" rows="5" 
-                              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-400">{{ old('description') }}</textarea>
+                <div class="mb-4">
+                    <h3 class="text-base mb-2">商品の説明</h3>
+                    <textarea name="description" 
+                              rows="5"
+                              class="w-full border border-gray-300 rounded p-2"
+                              required>{{ old('description') }}</textarea>
                     @error('description')
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
 
             <!-- 販売価格 -->
             <div class="mb-8">
-                <h3 class="text-lg border-b pb-1 mb-4">販売価格</h3>
-                <div>
-                    <div class="relative">
-                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2">¥</span>
-                        <input type="number" name="price" value="{{ old('price') }}" 
-                               class="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-400">
-                    </div>
-                    @error('price')
-                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                    @enderror
+                <h2 class="text-base mb-2">販売価格</h2>
+                <div class="flex items-center">
+                    <span class="mr-2">¥</span>
+                    <input type="number" 
+                           name="price" 
+                           value="{{ old('price') }}"
+                           class="w-full border border-gray-300 rounded p-2"
+                           required>
                 </div>
+                @error('price')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <!-- 出品ボタン -->
-            <div>
-                <button type="submit" class="w-full bg-red-500 text-white py-3 rounded-lg hover:bg-red-600 transition-colors">
+            <div class="text-center">
+                <button type="submit" class="w-full bg-red-500 text-white py-3 rounded hover:bg-red-600 transition-colors duration-200">
                     出品する
                 </button>
             </div>
         </form>
     </div>
 </div>
-
-<style>
-.category-label input[type="radio"]:checked + span {
-    background-color: rgb(254 242 242);
-    color: rgb(239 68 68);
-    border-color: rgb(239 68 68);
-}
-.category-label:hover span {
-    background-color: rgb(254 242 242);
-}
-</style>
-
-@push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const dropArea = document.getElementById('dropArea');
-    const fileInput = document.getElementById('image');
-    const preview = document.getElementById('preview');
-    const previewImg = preview.querySelector('img');
-    const uploadPrompt = document.getElementById('uploadPrompt');
-    const removeButton = document.getElementById('removeImage');
-
-    // ドラッグオーバー時のスタイル
-    ['dragenter', 'dragover'].forEach(eventName => {
-        dropArea.addEventListener(eventName, (e) => {
-            e.preventDefault();
-            dropArea.classList.add('bg-gray-50', 'border-red-500');
-        });
-    });
-
-    // ドラッグリーブ時のスタイル
-    ['dragleave', 'drop'].forEach(eventName => {
-        dropArea.addEventListener(eventName, (e) => {
-            e.preventDefault();
-            dropArea.classList.remove('bg-gray-50', 'border-red-500');
-        });
-    });
-
-    // ドロップ時の処理
-    dropArea.addEventListener('drop', (e) => {
-        e.preventDefault();
-        const file = e.dataTransfer.files[0];
-        if (file && file.type.startsWith('image/')) {
-            handleFile(file);
-        }
-    });
-
-    // ファイル選択時の処理
-    fileInput.addEventListener('change', (e) => {
-        if (e.target.files.length > 0) {
-            handleFile(e.target.files[0]);
-        }
-    });
-
-    // 削除ボタンの処理
-    removeButton.addEventListener('click', () => {
-        fileInput.value = '';
-        preview.classList.add('hidden');
-        uploadPrompt.classList.remove('hidden');
-        previewImg.src = '';
-    });
-
-    // ファイル処理の共通関数
-    function handleFile(file) {
-        if (file && file.type.startsWith('image/')) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                previewImg.src = e.target.result;
-                preview.classList.remove('hidden');
-                uploadPrompt.classList.add('hidden');
-            };
-            reader.readAsDataURL(file);
-        }
-    }
-
-    // カテゴリー選択の処理
-    const categoryContainer = document.getElementById('categoryContainer');
-    const categoryLabels = categoryContainer.querySelectorAll('.category-label');
-
-    categoryLabels.forEach(label => {
-        const radio = label.querySelector('input[type="radio"]');
-        const span = label.querySelector('span');
-
-        // 初期状態の設定
-        if (radio.checked) {
-            span.classList.add('bg-red-50', 'text-red-500', 'border-red-500');
-        }
-
-        // クリックイベントの処理
-        label.addEventListener('click', () => {
-            // 全てのスパンからアクティブクラスを削除
-            categoryLabels.forEach(otherLabel => {
-                const otherSpan = otherLabel.querySelector('span');
-                otherSpan.classList.remove('bg-red-50', 'text-red-500', 'border-red-500');
-            });
-
-            // クリックされたスパンにアクティブクラスを追加
-            span.classList.add('bg-red-50', 'text-red-500', 'border-red-500');
-        });
-
-        // ホバー効果
-        label.addEventListener('mouseenter', () => {
-            if (!radio.checked) {
-                span.classList.add('bg-red-50');
-            }
-        });
-
-        label.addEventListener('mouseleave', () => {
-            if (!radio.checked) {
-                span.classList.remove('bg-red-50');
-            }
-        });
-    });
-});
-</script>
-@endpush
 @endsection 

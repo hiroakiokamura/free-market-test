@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
 use Laravel\Fortify\Fortify;
 use Laravel\Fortify\Contracts\RegisterResponse;
 use Laravel\Fortify\Contracts\LoginResponse;
+use Laravel\Fortify\Contracts\LoginViewResponse;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -42,6 +43,14 @@ class FortifyServiceProvider extends ServiceProvider
                 return redirect()->route('home');
             }
         });
+
+        // ログインビューのレスポンスを設定
+        $this->app->instance(LoginViewResponse::class, new class implements LoginViewResponse {
+            public function toResponse($request)
+            {
+                return view('auth.login');
+            }
+        });
     }
 
     /**
@@ -56,6 +65,11 @@ class FortifyServiceProvider extends ServiceProvider
         // 登録ビューの設定
         Fortify::registerView(function () {
             return view('auth.register');
+        });
+
+        // ログインビューの設定
+        Fortify::loginView(function () {
+            return view('auth.login');
         });
 
         // メール認証ビューの設定

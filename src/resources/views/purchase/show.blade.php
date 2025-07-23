@@ -60,7 +60,6 @@
                     return;
                 }
 
-                // 支払い方法IDをフォームに追加
                 const hiddenInput = document.createElement('input');
                 hiddenInput.setAttribute('type', 'hidden');
                 hiddenInput.setAttribute('name', 'payment_method_id');
@@ -82,67 +81,111 @@
 
 @section('content')
 <div class="container mx-auto px-4 py-8">
-    <h1 class="text-2xl font-bold mb-6">商品購入</h1>
+    <div class="max-w-4xl mx-auto">
+        <div class="purchase-container">
+            <!-- 左側：商品情報と支払い方法 -->
+            <div class="purchase-main">
+                <!-- 商品情報 -->
+                <div class="bg-white rounded-lg p-6 mb-6">
+                    <div class="flex items-start gap-4">
+                        <img src="{{ Storage::url($item->image_path) }}" 
+                             alt="{{ $item->name }}" 
+                             class="w-32 h-32 object-cover">
+                        <h2 class="text-xl">{{ $item->name }}</h2>
+                    </div>
+                </div>
 
-    <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
-        <h2 class="text-xl font-semibold mb-4">商品情報</h2>
-        <div class="flex items-start">
-            <img src="{{ Storage::url($item->image_path) }}" alt="{{ $item->name }}" class="w-32 h-32 object-cover rounded-lg">
-            <div class="ml-4">
-                <h3 class="text-lg font-semibold">{{ $item->name }}</h3>
-                <p class="text-gray-600">¥{{ number_format($item->price) }}</p>
+                <!-- 配送先情報 -->
+                <div class="bg-white rounded-lg p-6 mb-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg">配送先</h3>
+                        <a href="{{ route('purchase.address', $item->id) }}" class="text-red-500 hover:text-red-600">
+                            変更する
+                        </a>
+                    </div>
+                    @if(!empty($address))
+                        <p>{{ $address }}</p>
+                    @else
+                        <p class="text-red-500">配送先住所が設定されていません</p>
+                    @endif
+                </div>
+
+                <!-- 支払い方法選択 -->
+                <div class="bg-white rounded-lg p-6">
+                    <h3 class="text-lg mb-4">支払い方法</h3>
+                    <div class="space-y-4">
+                        <label class="block">
+                            <input type="radio" name="payment_method" value="card" checked onchange="togglePaymentMethod()" class="mr-2">
+                            クレジットカード
+                        </label>
+                        <div id="card-element-container" class="mt-4 mb-6">
+                            <div id="card-element" class="border p-4 rounded-lg"></div>
+                            <div id="card-errors" role="alert" class="text-red-500 text-sm mt-2"></div>
+                        </div>
+
+                        <label class="block">
+                            <input type="radio" name="payment_method" value="konbini" onchange="togglePaymentMethod()" class="mr-2">
+                            コンビニ支払い
+                        </label>
+                        <div id="konbini-container" class="hidden mt-4">
+                            <input type="email" name="email" value="{{ auth()->user()->email }}" class="w-full border p-2 rounded-lg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右側：購入サマリー -->
+            <div class="purchase-sidebar">
+                <div class="purchase-summary">
+                    <form id="payment-form" action="{{ route('purchase.process', $item->id) }}" method="POST">
+                        @csrf
+                        <div class="purchase-summary-content">
+                            <div class="purchase-price mb-4">
+                                <span>商品代金</span>
+                                <span class="text-xl font-bold">¥{{ number_format($item->price) }}</span>
+                            </div>
+                            <div class="purchase-price mb-4">
+                                <span>支払い方法</span>
+                                <span id="selected-payment-method">コンビニ支払い</span>
+                            </div>
+                            <div class="border-t pt-4">
+                                <div class="text-sm text-gray-600 mb-2">配送先</div>
+                                @if(!empty($address))
+                                    <div class="text-sm">
+                                        <p>{{ $address }}</p>
+                                    </div>
+                                @else
+                                    <p class="text-red-500 text-sm">配送先住所が設定されていません</p>
+                                @endif
+                            </div>
+                        </div>
+                        <button type="submit" class="purchase-button">
+                            購入する
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-
-    <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
-        <h2 class="text-xl font-semibold mb-4">配送先情報</h2>
-        @if(auth()->user()->prefecture && auth()->user()->city && auth()->user()->address)
-            <p>〒{{ auth()->user()->postal_code }}</p>
-            <p>{{ auth()->user()->prefecture }}{{ auth()->user()->city }}{{ auth()->user()->address }}</p>
-            @if(auth()->user()->building)
-                <p>{{ auth()->user()->building }}</p>
-            @endif
-        @else
-            <p class="text-red-500">配送先住所が設定されていません</p>
-        @endif
-        <div class="mt-4">
-            <a href="{{ route('purchase.address', $item->id) }}" class="text-blue-500 hover:text-blue-700">
-                配送先を変更する
-            </a>
-        </div>
-    </div>
-
-    <form id="payment-form" action="{{ route('purchase.process', $item->id) }}" method="POST" class="bg-white rounded-lg shadow-lg p-6">
-        @csrf
-        <h2 class="text-xl font-semibold mb-4">支払い方法</h2>
-
-        <div class="mb-4">
-            <label class="inline-flex items-center">
-                <input type="radio" name="payment_method" value="card" checked onchange="togglePaymentMethod()" class="form-radio">
-                <span class="ml-2">クレジットカード</span>
-            </label>
-            <label class="inline-flex items-center ml-6">
-                <input type="radio" name="payment_method" value="konbini" onchange="togglePaymentMethod()" class="form-radio">
-                <span class="ml-2">コンビニ決済</span>
-            </label>
-        </div>
-
-        <div id="card-element-container">
-            <div id="card-element" class="mb-4"></div>
-            <div id="card-errors" role="alert" class="text-red-500 mb-4"></div>
-        </div>
-
-        <div id="konbini-container" style="display: none;">
-            <div class="mb-4">
-                <label for="email" class="block text-sm font-medium text-gray-700">メールアドレス</label>
-                <input type="email" name="email" id="email" value="{{ auth()->user()->email }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-            </div>
-        </div>
-
-        <button type="submit" class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200">
-            購入する
-        </button>
-    </form>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 支払い方法の表示を更新する関数
+    function updateSelectedPaymentMethod() {
+        const method = document.querySelector('input[name="payment_method"]:checked').value;
+        const displayText = method === 'card' ? 'クレジットカード' : 'コンビニ支払い';
+        document.getElementById('selected-payment-method').textContent = displayText;
+    }
+
+    // ラジオボタンの変更を監視
+    const radioButtons = document.querySelectorAll('input[name="payment_method"]');
+    radioButtons.forEach(radio => {
+        radio.addEventListener('change', updateSelectedPaymentMethod);
+    });
+
+    // 初期表示
+    updateSelectedPaymentMethod();
+});
+</script>
 @endsection 

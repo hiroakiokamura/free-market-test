@@ -13,7 +13,7 @@
                         <img src="{{ auth()->user()->profile_photo_url ?? asset('images/default-profile.png') }}" 
                              alt="プロフィール画像" class="w-full h-full object-cover">
                     </div>
-                    <h2 class="text-xl">ユーザー名</h2>
+                    <h2 class="text-xl">{{ auth()->user()->name }}</h2>
                 </div>
                 <a href="{{ route('profile.edit') }}" class="text-red-500 border border-red-500 rounded-full px-6 py-2 hover:bg-red-50">
                     プロフィールを編集
