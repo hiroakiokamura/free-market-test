@@ -12817,3 +12817,221 @@
 [2025-07-23 10:20:10] local.INFO: コンビニ決済処理開始  
 [2025-07-23 10:20:10] local.INFO: コンビニ決済パラメータ:  {"amount":456,"currency":"jpy","payment_method_types":["konbini"],"payment_method_data":{"type":"konbini","billing_details":{"email":"howillow12021985@gmail.com","name":"hiroaki okamura"}},"confirm":true,"return_url":"http://localhost:8000/purchase/7/complete","metadata":{"item_id":7,"user_id":3}} 
 [2025-07-23 10:20:11] local.INFO: PaymentIntent作成完了:  {"payment_id":"pi_3RnrLqCAmhJuyyQ00iKtmeNO"} 
+[2025-07-23 12:43:15] local.INFO: Registration attempt started {"input":{"_token":"lJUqbmtTDscAP2PhSch1P5UxmqkIBqsexVJCjRyA","name":"岡村　浩明","email":"papapa12021985@ezweb.ne.jp","password":"HIDDEN","password_confirmation":"hogehoge"}} 
+[2025-07-23 12:43:15] local.INFO: Database connection successful {"database":"laravel_db"} 
+[2025-07-23 12:43:15] local.INFO: Validation passed, attempting to create user  
+[2025-07-23 12:43:15] local.INFO: User created successfully {"user_id":1,"email":"papapa12021985@ezweb.ne.jp"} 
+[2025-07-23 12:43:56] local.INFO: User address info: {"user_id":1,"postal_code":"5460042","city":null,"address":"西今川","building":"マンション"} 
+[2025-07-23 12:50:59] local.INFO: Registration attempt started {"input":{"_token":"lJUqbmtTDscAP2PhSch1P5UxmqkIBqsexVJCjRyA","name":"岡村　浩明","email":"papapa12021985@ezweb.ne.jp","password":"HIDDEN","password_confirmation":"hogehoge"}} 
+[2025-07-23 12:50:59] local.INFO: Database connection successful {"database":"laravel_db"} 
+[2025-07-23 12:50:59] local.INFO: Validation passed, attempting to create user  
+[2025-07-23 12:50:59] local.INFO: User created successfully {"user_id":1,"email":"papapa12021985@ezweb.ne.jp"} 
+[2025-07-23 12:51:35] local.INFO: User address info: {"user_id":1,"postal_code":"5460042","city":null,"address":"西今川","building":"dddd"} 
+[2025-07-23 12:51:39] local.INFO: Stripe決済開始:  {"payment_method":null,"amount":74442,"original_price":"74442.00","user_id":1,"item_id":1,"user_email":"papapa12021985@ezweb.ne.jp"} 
+[2025-07-23 12:51:39] local.INFO: Stripe APIキー設定完了  
+[2025-07-23 12:51:39] local.INFO: コンビニ決済処理開始  
+[2025-07-23 12:51:39] local.INFO: コンビニ決済パラメータ:  {"amount":74442,"currency":"jpy","payment_method_types":["konbini"],"payment_method_data":{"type":"konbini","billing_details":{"email":"papapa12021985@ezweb.ne.jp","name":"岡村 浩明"}},"confirm":true,"return_url":"http://localhost:8000/purchase/1/complete","metadata":{"item_id":1,"user_id":1}} 
+[2025-07-23 12:51:40] local.INFO: PaymentIntent作成完了:  {"payment_id":"pi_3RntiSCAmhJuyyQ01hnFnU8B"} 
+[2025-07-23 12:54:14] local.INFO: Registration attempt started {"input":{"_token":"lJUqbmtTDscAP2PhSch1P5UxmqkIBqsexVJCjRyA","name":"岡村　浩明","email":"papapa12021985@ezweb.ne.jp","password":"HIDDEN","password_confirmation":"hogehoge"}} 
+[2025-07-23 12:54:14] local.INFO: Database connection successful {"database":"laravel_db"} 
+[2025-07-23 12:54:14] local.INFO: Validation passed, attempting to create user  
+[2025-07-23 12:54:14] local.INFO: User created successfully {"user_id":1,"email":"papapa12021985@ezweb.ne.jp"} 
+[2025-07-23 12:54:38] local.INFO: User address info: {"user_id":1,"postal_code":"5460042","city":null,"address":"西今川","building":null} 
+[2025-07-23 12:54:41] local.INFO: Stripe決済開始:  {"payment_method":null,"amount":789,"original_price":"789.00","user_id":1,"item_id":1,"user_email":"papapa12021985@ezweb.ne.jp"} 
+[2025-07-23 12:54:41] local.INFO: Stripe APIキー設定完了  
+[2025-07-23 12:54:41] local.INFO: コンビニ決済処理開始  
+[2025-07-23 12:54:41] local.INFO: コンビニ決済パラメータ:  {"amount":789,"currency":"jpy","payment_method_types":["konbini"],"payment_method_data":{"type":"konbini","billing_details":{"email":"papapa12021985@ezweb.ne.jp","name":"岡村 浩明"}},"confirm":true,"return_url":"http://localhost:8000/purchase/1/complete","metadata":{"item_id":1,"user_id":1}} 
+[2025-07-23 12:54:42] local.INFO: PaymentIntent作成完了:  {"payment_id":"pi_3RntlOCAmhJuyyQ00yTu9p9w"} 
+[2025-07-23 13:20:52] local.INFO: User address info: {"user_id":1,"postal_code":"5460042","city":null,"address":"西今川","building":null} 
+[2025-07-23 13:20:55] local.INFO: Stripe決済開始:  {"payment_method":null,"amount":45634563,"original_price":"45634563.00","user_id":1,"item_id":2,"user_email":"papapa12021985@ezweb.ne.jp"} 
+[2025-07-23 13:20:55] local.INFO: Stripe APIキー設定完了  
+[2025-07-23 13:20:55] local.INFO: コンビニ決済処理開始  
+[2025-07-23 13:20:55] local.INFO: コンビニ決済パラメータ:  {"amount":45634563,"currency":"jpy","payment_method_types":["konbini"],"payment_method_data":{"type":"konbini","billing_details":{"email":"papapa12021985@ezweb.ne.jp","name":"岡村 浩明"}},"confirm":true,"return_url":"http://localhost:8000/purchase/2/complete","metadata":{"item_id":2,"user_id":1}} 
+[2025-07-23 13:20:55] local.ERROR: Stripeエラー詳細:  {"message":"Amount must be no more than ¥300,000","code":"amount_too_large","http_status":400,"request_id":"req_yOexVscsKn2nE6","error":{"Stripe\\ErrorObject":{"charge":null,"code":"amount_too_large","decline_code":null,"doc_url":"https://stripe.com/docs/error-codes/amount-too-large","message":"Amount must be no more than ¥300,000","param":"amount","payment_intent":null,"payment_method":null,"setup_intent":null,"source":null,"type":"invalid_request_error","request_log_url":"https://dashboard.stripe.com/test/logs/req_yOexVscsKn2nE6?t=1753244455"}}} 
+[2025-07-23 13:20:55] local.INFO: User address info: {"user_id":1,"postal_code":"5460042","city":null,"address":"西今川","building":null} 
+[2025-07-23 13:21:16] local.INFO: User address info: {"user_id":1,"postal_code":"5460042","city":null,"address":"西今川","building":null} 
+[2025-07-23 13:21:19] local.INFO: Stripe決済開始:  {"payment_method":null,"amount":456,"original_price":"456.00","user_id":1,"item_id":3,"user_email":"papapa12021985@ezweb.ne.jp"} 
+[2025-07-23 13:21:19] local.INFO: Stripe APIキー設定完了  
+[2025-07-23 13:21:19] local.INFO: コンビニ決済処理開始  
+[2025-07-23 13:21:19] local.INFO: コンビニ決済パラメータ:  {"amount":456,"currency":"jpy","payment_method_types":["konbini"],"payment_method_data":{"type":"konbini","billing_details":{"email":"papapa12021985@ezweb.ne.jp","name":"岡村 浩明"}},"confirm":true,"return_url":"http://localhost:8000/purchase/3/complete","metadata":{"item_id":3,"user_id":1}} 
+[2025-07-23 13:21:20] local.INFO: PaymentIntent作成完了:  {"payment_id":"pi_3RnuB9CAmhJuyyQ006Rhq3cF"} 
+[2025-07-23 16:38:14] local.ERROR: file_get_contents(https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/%E3%83%A1%E3%82%A4%E3%82%AF%E3%82%BB%E3%83%83%E3%83%88.jpg): Failed to open stream: HTTP request failed! HTTP/1.1 403 Forbidden
+ {"exception":"[object] (ErrorException(code: 0): file_get_contents(https://coachtech-matter.s3.ap-northeast-1.amazonaws.com/image/%E3%83%A1%E3%82%A4%E3%82%AF%E3%82%BB%E3%83%83%E3%83%88.jpg): Failed to open stream: HTTP request failed! HTTP/1.1 403 Forbidden
+
+ at /var/www/database/factories/ItemFactory.php:112)
+[stacktrace]
+#0 /var/www/vendor/laravel/framework/src/Illuminate/Foundation/Bootstrap/HandleExceptions.php(255): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(2, 'file_get_conten...', '/var/www/databa...', 112)
+#1 [internal function]: Illuminate\\Foundation\\Bootstrap\\HandleExceptions->Illuminate\\Foundation\\Bootstrap\\{closure}(2, 'file_get_conten...', '/var/www/databa...', 112)
+#2 /var/www/database/factories/ItemFactory.php(112): file_get_contents('https://coachte...')
+#3 /var/www/database/seeders/ItemSeeder.php(25): Database\\Factories\\ItemFactory->definition()
+#4 /var/www/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): Database\\Seeders\\ItemSeeder->run()
+#5 /var/www/vendor/laravel/framework/src/Illuminate/Container/Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#6 /var/www/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#7 /var/www/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#8 /var/www/vendor/laravel/framework/src/Illuminate/Container/Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#9 /var/www/vendor/laravel/framework/src/Illuminate/Database/Seeder.php(184): Illuminate\\Container\\Container->call(Array, Array)
+#10 /var/www/vendor/laravel/framework/src/Illuminate/Database/Seeder.php(193): Illuminate\\Database\\Seeder->Illuminate\\Database\\{closure}()
+#11 /var/www/vendor/laravel/framework/src/Illuminate/Database/Seeder.php(61): Illuminate\\Database\\Seeder->__invoke(Array)
+#12 /var/www/database/seeders/DatabaseSeeder.php(22): Illuminate\\Database\\Seeder->call('Database\\\\Seeder...')
+#13 /var/www/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): Database\\Seeders\\DatabaseSeeder->run()
+#14 /var/www/vendor/laravel/framework/src/Illuminate/Container/Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#15 /var/www/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#16 /var/www/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#17 /var/www/vendor/laravel/framework/src/Illuminate/Container/Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#18 /var/www/vendor/laravel/framework/src/Illuminate/Database/Seeder.php(184): Illuminate\\Container\\Container->call(Array, Array)
+#19 /var/www/vendor/laravel/framework/src/Illuminate/Database/Seeder.php(193): Illuminate\\Database\\Seeder->Illuminate\\Database\\{closure}()
+#20 /var/www/vendor/laravel/framework/src/Illuminate/Database/Console/Seeds/SeedCommand.php(70): Illuminate\\Database\\Seeder->__invoke()
+#21 /var/www/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Concerns/GuardsAttributes.php(155): Illuminate\\Database\\Console\\Seeds\\SeedCommand->Illuminate\\Database\\Console\\Seeds\\{closure}()
+#22 /var/www/vendor/laravel/framework/src/Illuminate/Database/Console/Seeds/SeedCommand.php(69): Illuminate\\Database\\Eloquent\\Model::unguarded(Object(Closure))
+#23 /var/www/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): Illuminate\\Database\\Console\\Seeds\\SeedCommand->handle()
+#24 /var/www/vendor/laravel/framework/src/Illuminate/Container/Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#25 /var/www/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#26 /var/www/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#27 /var/www/vendor/laravel/framework/src/Illuminate/Container/Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#28 /var/www/vendor/laravel/framework/src/Illuminate/Console/Command.php(211): Illuminate\\Container\\Container->call(Array)
+#29 /var/www/vendor/symfony/console/Command/Command.php(326): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArrayInput), Object(Illuminate\\Console\\OutputStyle))
+#30 /var/www/vendor/laravel/framework/src/Illuminate/Console/Command.php(180): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArrayInput), Object(Illuminate\\Console\\OutputStyle))
+#31 /var/www/vendor/laravel/framework/src/Illuminate/Console/Concerns/CallsCommands.php(67): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArrayInput), Object(Illuminate\\Console\\OutputStyle))
+#32 /var/www/vendor/laravel/framework/src/Illuminate/Console/Concerns/CallsCommands.php(28): Illuminate\\Console\\Command->runCommand('db:seed', Array, Object(Illuminate\\Console\\OutputStyle))
+#33 /var/www/vendor/laravel/framework/src/Illuminate/Database/Console/Migrations/FreshCommand.php(93): Illuminate\\Console\\Command->call('db:seed', Array)
+#34 /var/www/vendor/laravel/framework/src/Illuminate/Database/Console/Migrations/FreshCommand.php(69): Illuminate\\Database\\Console\\Migrations\\FreshCommand->runSeeder(NULL)
+#35 /var/www/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): Illuminate\\Database\\Console\\Migrations\\FreshCommand->handle()
+#36 /var/www/vendor/laravel/framework/src/Illuminate/Container/Util.php(41): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#37 /var/www/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#38 /var/www/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#39 /var/www/vendor/laravel/framework/src/Illuminate/Container/Container.php(662): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#40 /var/www/vendor/laravel/framework/src/Illuminate/Console/Command.php(211): Illuminate\\Container\\Container->call(Array)
+#41 /var/www/vendor/symfony/console/Command/Command.php(326): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#42 /var/www/vendor/laravel/framework/src/Illuminate/Console/Command.php(180): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#43 /var/www/vendor/symfony/console/Application.php(1096): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#44 /var/www/vendor/symfony/console/Application.php(324): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Database\\Console\\Migrations\\FreshCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#45 /var/www/vendor/symfony/console/Application.php(175): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#46 /var/www/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(201): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#47 /var/www/artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#48 {main}
+"} 
+[2025-07-23 16:53:43] local.INFO: Registration attempt started {"input":{"_token":"kNZhV4Dq3vIFfsuVlwyzDJmoUm4C8N7Zp5AGdce5","name":"岡村　浩明","email":"howillow12021985@gmail.com","password":"HIDDEN","password_confirmation":"hogehoge"}} 
+[2025-07-23 16:53:43] local.INFO: Database connection successful {"database":"laravel_db"} 
+[2025-07-23 16:53:43] local.ERROR: Validation failed {"errors":{"password":["パスワードは8文字以上で入力してください。","パスワードが確認用の値と一致しません。"]}} 
+[2025-07-23 16:53:43] local.ERROR: Error in user creation process {"message":"パスワードは8文字以上で入力してください。 (and 1 more error)","trace":"#0 /var/www/vendor/laravel/fortify/src/Http/Controllers/RegisteredUserController.php(62): App\\Actions\\Fortify\\CreateNewUser->create(Array)
+#1 /var/www/vendor/laravel/framework/src/Illuminate/Routing/Controller.php(54): Laravel\\Fortify\\Http\\Controllers\\RegisteredUserController->store(Object(Illuminate\\Http\\Request), Object(App\\Actions\\Fortify\\CreateNewUser))
+#2 /var/www/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(43): Illuminate\\Routing\\Controller->callAction('store', Array)
+#3 /var/www/vendor/laravel/framework/src/Illuminate/Routing/Route.php(259): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(Laravel\\Fortify\\Http\\Controllers\\RegisteredUserController), 'store')
+#4 /var/www/vendor/laravel/framework/src/Illuminate/Routing/Route.php(205): Illuminate\\Routing\\Route->runController()
+#5 /var/www/vendor/laravel/framework/src/Illuminate/Routing/Router.php(806): Illuminate\\Routing\\Route->run()
+#6 /var/www/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(144): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#7 /var/www/app/Http/Middleware/RedirectIfAuthenticated.php(28): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#8 /var/www/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): App\\Http\\Middleware\\RedirectIfAuthenticated->handle(Object(Illuminate\\Http\\Request), Object(Closure), 'web')
+#9 /var/www/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(50): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#10 /var/www/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#11 /var/www/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/VerifyCsrfToken.php(78): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#12 /var/www/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#13 /var/www/vendor/laravel/framework/src/Illuminate/View/Middleware/ShareErrorsFromSession.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#14 /var/www/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\View\\Middleware\\ShareErrorsFromSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#15 /var/www/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(121): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#16 /var/www/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(64): Illuminate\\Session\\Middleware\\StartSession->handleStatefulRequest(Object(Illuminate\\Http\\Request), Object(Illuminate\\Session\\Store), Object(Closure))
+#17 /var/www/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Session\\Middleware\\StartSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#18 /var/www/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/AddQueuedCookiesToResponse.php(37): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#19 /var/www/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#20 /var/www/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/EncryptCookies.php(67): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#21 /var/www/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Cookie\\Middleware\\EncryptCookies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#22 /var/www/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#23 /var/www/vendor/laravel/framework/src/Illuminate/Routing/Router.php(805): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#24 /var/www/vendor/laravel/framework/src/Illuminate/Routing/Router.php(784): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#25 /var/www/vendor/laravel/framework/src/Illuminate/Routing/Router.php(748): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#26 /var/www/vendor/laravel/framework/src/Illuminate/Routing/Router.php(737): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#27 /var/www/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#28 /var/www/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(144): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#29 /var/www/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#30 /var/www/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#31 /var/www/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#32 /var/www/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#33 /var/www/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(40): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#34 /var/www/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#35 /var/www/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#36 /var/www/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#37 /var/www/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(99): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#38 /var/www/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#39 /var/www/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#40 /var/www/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Http\\Middleware\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#41 /var/www/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(39): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#42 /var/www/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#43 /var/www/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#44 /var/www/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#45 /var/www/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#46 /var/www/public/index.php(51): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#47 {main}"} 
+[2025-07-23 16:53:49] local.INFO: Registration attempt started {"input":{"_token":"kNZhV4Dq3vIFfsuVlwyzDJmoUm4C8N7Zp5AGdce5","name":"岡村　浩明","email":"howillow12021985@gmail.com","password":"HIDDEN","password_confirmation":"hogehoge"}} 
+[2025-07-23 16:53:49] local.INFO: Database connection successful {"database":"laravel_db"} 
+[2025-07-23 16:53:49] local.INFO: Validation passed, attempting to create user  
+[2025-07-23 16:53:49] local.INFO: User created successfully {"user_id":2,"email":"howillow12021985@gmail.com"} 
+[2025-07-23 16:57:29] local.INFO: Registration attempt started {"input":{"_token":"kNZhV4Dq3vIFfsuVlwyzDJmoUm4C8N7Zp5AGdce5","name":"岡村　浩明","email":"howillow12021985@gmail.com","password":"HIDDEN","password_confirmation":"hogehoge"}} 
+[2025-07-23 16:57:29] local.INFO: Database connection successful {"database":"laravel_db"} 
+[2025-07-23 16:57:29] local.INFO: Validation passed, attempting to create user  
+[2025-07-23 16:57:30] local.INFO: User created successfully {"user_id":2,"email":"howillow12021985@gmail.com"} 
+[2025-07-23 17:05:26] local.INFO: Registration attempt started {"input":{"_token":"kNZhV4Dq3vIFfsuVlwyzDJmoUm4C8N7Zp5AGdce5","name":"岡村　浩明","email":"howillow12021985@gmail.com","password":"HIDDEN","password_confirmation":"hogehoge"}} 
+[2025-07-23 17:05:26] local.INFO: Database connection successful {"database":"laravel_db"} 
+[2025-07-23 17:05:26] local.INFO: Validation passed, attempting to create user  
+[2025-07-23 17:05:26] local.INFO: User created successfully {"user_id":2,"email":"howillow12021985@gmail.com"} 
+[2025-07-23 17:05:46] local.INFO: User address info: {"user_id":2,"postal_code":"dadfada","city":null,"address":"ddafafda","building":null} 
+[2025-07-23 17:12:10] local.INFO: Registration attempt started {"input":{"_token":"kNZhV4Dq3vIFfsuVlwyzDJmoUm4C8N7Zp5AGdce5","name":"岡村　浩明","email":"howillow12021985@gmail.com","password":"HIDDEN","password_confirmation":"hogehoge"}} 
+[2025-07-23 17:12:10] local.INFO: Database connection successful {"database":"laravel_db"} 
+[2025-07-23 17:12:10] local.INFO: Validation passed, attempting to create user  
+[2025-07-23 17:12:11] local.INFO: User created successfully {"user_id":2,"email":"howillow12021985@gmail.com"} 
+[2025-07-23 17:13:40] local.INFO: User address info: {"user_id":2,"postal_code":"5460042","city":null,"address":"大阪市東住吉区西今川","building":null} 
+[2025-07-23 17:13:44] local.INFO: Stripe決済開始:  {"payment_method":null,"amount":789,"original_price":"789.00","user_id":2,"item_id":11,"user_email":"howillow12021985@gmail.com"} 
+[2025-07-23 17:13:44] local.INFO: Stripe APIキー設定完了  
+[2025-07-23 17:13:44] local.INFO: コンビニ決済処理開始  
+[2025-07-23 17:13:44] local.INFO: コンビニ決済パラメータ:  {"amount":789,"currency":"jpy","payment_method_types":["konbini"],"payment_method_data":{"type":"konbini","billing_details":{"email":"howillow12021985@gmail.com","name":"岡村 浩明"}},"confirm":true,"return_url":"http://localhost:8000/purchase/11/complete","metadata":{"item_id":11,"user_id":2}} 
+[2025-07-23 17:13:45] local.INFO: PaymentIntent作成完了:  {"payment_id":"pi_3Rnxo4CAmhJuyyQ00T7GHhm1"} 
+[2025-07-23 17:48:36] local.INFO: Registration attempt started {"input":{"_token":"IM2alTd9gsQ02kzhkiN3OYocKJ26kEdh0Pzpyyfe","name":"岡村　浩明","email":"howillow12021985@gmail.com","password":"HIDDEN","password_confirmation":"hogehoge"}} 
+[2025-07-23 17:48:36] local.INFO: Database connection successful {"database":"laravel_db"} 
+[2025-07-23 17:48:36] local.ERROR: Validation failed {"errors":{"email":["このメールアドレスは既に使用されています。"]}} 
+[2025-07-23 17:48:36] local.ERROR: Error in user creation process {"message":"このメールアドレスは既に使用されています。","trace":"#0 /var/www/vendor/laravel/fortify/src/Http/Controllers/RegisteredUserController.php(62): App\\Actions\\Fortify\\CreateNewUser->create(Array)
+#1 /var/www/vendor/laravel/framework/src/Illuminate/Routing/Controller.php(54): Laravel\\Fortify\\Http\\Controllers\\RegisteredUserController->store(Object(Illuminate\\Http\\Request), Object(App\\Actions\\Fortify\\CreateNewUser))
+#2 /var/www/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(43): Illuminate\\Routing\\Controller->callAction('store', Array)
+#3 /var/www/vendor/laravel/framework/src/Illuminate/Routing/Route.php(259): Illuminate\\Routing\\ControllerDispatcher->dispatch(Object(Illuminate\\Routing\\Route), Object(Laravel\\Fortify\\Http\\Controllers\\RegisteredUserController), 'store')
+#4 /var/www/vendor/laravel/framework/src/Illuminate/Routing/Route.php(205): Illuminate\\Routing\\Route->runController()
+#5 /var/www/vendor/laravel/framework/src/Illuminate/Routing/Router.php(806): Illuminate\\Routing\\Route->run()
+#6 /var/www/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(144): Illuminate\\Routing\\Router->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))
+#7 /var/www/app/Http/Middleware/RedirectIfAuthenticated.php(28): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#8 /var/www/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): App\\Http\\Middleware\\RedirectIfAuthenticated->handle(Object(Illuminate\\Http\\Request), Object(Closure), 'web')
+#9 /var/www/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(50): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#10 /var/www/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#11 /var/www/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/VerifyCsrfToken.php(78): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#12 /var/www/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\VerifyCsrfToken->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#13 /var/www/vendor/laravel/framework/src/Illuminate/View/Middleware/ShareErrorsFromSession.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#14 /var/www/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\View\\Middleware\\ShareErrorsFromSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#15 /var/www/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(121): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#16 /var/www/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(64): Illuminate\\Session\\Middleware\\StartSession->handleStatefulRequest(Object(Illuminate\\Http\\Request), Object(Illuminate\\Session\\Store), Object(Closure))
+#17 /var/www/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Session\\Middleware\\StartSession->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#18 /var/www/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/AddQueuedCookiesToResponse.php(37): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#19 /var/www/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#20 /var/www/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/EncryptCookies.php(67): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#21 /var/www/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Cookie\\Middleware\\EncryptCookies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#22 /var/www/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#23 /var/www/vendor/laravel/framework/src/Illuminate/Routing/Router.php(805): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#24 /var/www/vendor/laravel/framework/src/Illuminate/Routing/Router.php(784): Illuminate\\Routing\\Router->runRouteWithinStack(Object(Illuminate\\Routing\\Route), Object(Illuminate\\Http\\Request))
+#25 /var/www/vendor/laravel/framework/src/Illuminate/Routing/Router.php(748): Illuminate\\Routing\\Router->runRoute(Object(Illuminate\\Http\\Request), Object(Illuminate\\Routing\\Route))
+#26 /var/www/vendor/laravel/framework/src/Illuminate/Routing/Router.php(737): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))
+#27 /var/www/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))
+#28 /var/www/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(144): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))
+#29 /var/www/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#30 /var/www/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#31 /var/www/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#32 /var/www/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#33 /var/www/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(40): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#34 /var/www/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#35 /var/www/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#36 /var/www/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#37 /var/www/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(99): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#38 /var/www/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#39 /var/www/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(49): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#40 /var/www/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Http\\Middleware\\HandleCors->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#41 /var/www/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(39): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#42 /var/www/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(183): Illuminate\\Http\\Middleware\\TrustProxies->handle(Object(Illuminate\\Http\\Request), Object(Closure))
+#43 /var/www/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(119): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}(Object(Illuminate\\Http\\Request))
+#44 /var/www/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))
+#45 /var/www/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))
+#46 /var/www/public/index.php(51): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))
+#47 {main}"} 
