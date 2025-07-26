@@ -15,6 +15,31 @@ class ItemController extends Controller
     {
         $query = Item::latest();
 
+        // ログインユーザーの商品を除外
+        if (auth()->check()) {
+            $query->where('user_id', '!=', auth()->id());
+        }
+
+        // 表示モードに応じてクエリを変更
+        $mode = $request->get('mode', 'latest');
+        switch ($mode) {
+            case 'recommended':
+                $query->withCount('likes')
+                    ->orderByDesc('likes_count')
+                    ->orderByDesc('created_at');
+                break;
+            case 'mylist':
+                if (auth()->check()) {
+                    $query->whereHas('likes', function($q) {
+                        $q->where('user_id', auth()->id());
+                    });
+                }
+                break;
+            default:
+                // デフォルトは新着順
+                break;
+        }
+
         // 検索キーワードが存在する場合
         if ($request->has('search')) {
             $searchTerm = $request->search;
@@ -24,8 +49,8 @@ class ItemController extends Controller
             });
         }
 
-        $items = $query->paginate(20);
-        return view('items.index', compact('items'));
+        $items = $query->paginate(20)->withQueryString();
+        return view('items.index', compact('items', 'mode'));
     }
 
     /**

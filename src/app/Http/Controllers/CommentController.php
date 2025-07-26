@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use App\Models\Item;
-use Illuminate\Http\Request;
+use App\Http\Requests\CommentRequest;
 use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
@@ -14,12 +14,8 @@ class CommentController extends Controller
         $this->middleware('auth');
     }
 
-    public function store(Request $request, Item $item)
+    public function store(CommentRequest $request, Item $item)
     {
-        $request->validate([
-            'content' => 'required|string|max:255',
-        ]);
-
         $comment = new Comment([
             'user_id' => Auth::id(),
             'content' => $request->content,
