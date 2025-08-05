@@ -34,7 +34,7 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/item/{item_id}', [ItemController::class, 'show'])->name('item.show');
 
 // 認証が必要なルート
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     // 商品購入関連
     Route::get('/purchase/{item}', [PurchaseController::class, 'show'])->name('purchase.show');
     Route::post('/purchase/{item}', [PurchaseController::class, 'process'])->name('purchase.process');
