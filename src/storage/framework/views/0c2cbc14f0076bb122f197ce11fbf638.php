@@ -59,15 +59,13 @@
 
                 <!-- カテゴリー -->
                 <div class="flex flex-wrap gap-2 mb-8">
-                    <?php if($item->categories->isEmpty()): ?>
-                        <p class="text-gray-500">カテゴリーが設定されていません</p>
-                    <?php else: ?>
-                        <?php $__currentLoopData = $item->categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <span class="inline-block px-4 py-1 border border-red-500 text-red-500 bg-red-50 rounded-full text-sm">
-                                <?php echo e($category->name); ?>
+                    <?php if($item->category): ?>
+                        <span class="inline-block px-4 py-1 border border-red-500 text-red-500 bg-red-50 rounded-full text-sm">
+                            <?php echo e($item->category); ?>
 
-                            </span>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        </span>
+                    <?php else: ?>
+                        <p class="text-gray-500">カテゴリーが設定されていません</p>
                     <?php endif; ?>
                 </div>
 

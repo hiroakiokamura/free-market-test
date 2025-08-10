@@ -28,20 +28,12 @@ class PurchaseController extends Controller
             'building' => $user->building,
         ]);
 
-        // 住所情報を取得（都道府県は任意）
-        $addressParts = array_filter([
-            $user->postal_code,
-            $user->city,
-            $user->address,
-            $user->building
-        ]);
-
         // 住所が設定されているかチェック
-        if (empty($addressParts)) {
+        if (empty($user->postal_code) || empty($user->address)) {
             return redirect()->route('profile.edit')->with('error', '配送先住所を設定してください');
         }
 
-        $address = implode(' ', $addressParts);
+        $address = $user->address;
 
         return view('purchase.show', compact('item', 'address'));
     }
@@ -71,22 +63,10 @@ class PurchaseController extends Controller
             'building' => 'nullable|string',
         ]);
 
-        // 住所を都道府県、市区町村、番地に分割
-        $addressParts = $this->parseAddress($validated['address']);
-
-        // 都道府県が見つからない場合はエラー
-        if (empty($addressParts['prefecture'])) {
-            return redirect()->back()
-                ->withInput()
-                ->withErrors(['address' => '正しい都道府県名から入力してください。']);
-        }
-
         $user = auth()->user();
         $user->update([
             'postal_code' => $validated['postal_code'],
-            'prefecture' => $addressParts['prefecture'],
-            'city' => $addressParts['city'],
-            'address' => $addressParts['street'],
+            'address' => $validated['address'],
             'building' => $validated['building'],
         ]);
 
@@ -104,6 +84,21 @@ class PurchaseController extends Controller
     {
         $item = Item::findOrFail($item_id);
         $user = auth()->user();
+
+        // 自分の商品かチェック（最初にチェック）
+        if ($item->user_id == $user->id) {
+            abort(403, '自分の商品は購入できません。');
+        }
+
+        // 商品が既に売れているかチェック
+        if ($item->status === 'sold' || $item->status === 'sold_out') {
+            abort(403, 'この商品は既に売り切れです。');
+        }
+
+        // 住所が設定されているかチェック
+        if (empty($user->postal_code) || empty($user->address)) {
+            return redirect()->back()->with('error', '配送先住所を設定してください');
+        }
 
         // メールアドレスの形式を確認
         if (!filter_var($user->email, FILTER_VALIDATE_EMAIL)) {
@@ -195,8 +190,6 @@ class PurchaseController extends Controller
                 'item_id' => $item->id,
                 'price' => $item->price,
                 'shipping_postal_code' => $user->postal_code ?? null,
-                'shipping_prefecture' => $user->prefecture ?? null,
-                'shipping_city' => $user->city ?? null,
                 'shipping_address' => $user->address ?? null,
                 'shipping_building' => $user->building,  // buildingは元々nullable
                 'payment_intent_id' => $payment->id,
@@ -205,7 +198,7 @@ class PurchaseController extends Controller
             ]);
 
             // 商品を売り切れ状態に更新
-            $item->update(['status' => 'sold_out']);
+            $item->update(['status' => 'sold']);
 
             if ($request->payment_method === 'konbini') {
                 // コンビニ決済の場合は購入履歴画面へ

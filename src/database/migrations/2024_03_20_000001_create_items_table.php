@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('image_path');
             $table->string('status')->default('on_sale');
             $table->enum('condition', ['new', 'like_new', 'good', 'fair', 'poor'])->default('new');
+            $table->string('category')->nullable(); // カテゴリ情報を直接追加
             $table->timestamps();
             $table->softDeletes();
         });

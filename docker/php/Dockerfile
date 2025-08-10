@@ -12,7 +12,9 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     default-mysql-client \
     default-libmysqlclient-dev \
-    libcurl4-openssl-dev
+    libcurl4-openssl-dev \
+    libjpeg-dev \
+    libfreetype6-dev
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -20,6 +22,7 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 # Configure and install PHP extensions
 RUN docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd && \
     docker-php-ext-configure mysqli --with-mysqli=mysqlnd && \
+    docker-php-ext-configure gd --with-freetype --with-jpeg && \
     docker-php-ext-install -j$(nproc) \
     pdo \
     pdo_mysql \

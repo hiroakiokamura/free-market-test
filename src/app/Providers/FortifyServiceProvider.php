@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Fortify\Fortify;
 use Laravel\Fortify\Contracts\RegisterResponse;
 use Laravel\Fortify\Contracts\LoginResponse;
@@ -50,6 +51,30 @@ class FortifyServiceProvider extends ServiceProvider
             {
                 return view('auth.login');
             }
+        });
+
+        // ログインバリデーションをカスタマイズ
+        Fortify::authenticateUsing(function (Request $request) {
+            // バリデーションを実行
+            $request->validate([
+                'email' => 'required|email',
+                'password' => 'required',
+            ], [
+                'email.required' => 'メールアドレスを入力してください',
+                'email.email' => 'メールアドレスを正しい形式で入力してください',
+                'password.required' => 'パスワードを入力してください',
+            ]);
+            
+            $user = \App\Models\User::where('email', $request->email)->first();
+            
+            if ($user && Hash::check($request->password, $user->password)) {
+                return $user;
+            }
+            
+            // 認証失敗時に独自のメッセージを設定
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'email' => 'パスワードが一致しません',
+            ]);
         });
     }
 

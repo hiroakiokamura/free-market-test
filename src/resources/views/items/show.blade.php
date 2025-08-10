@@ -61,14 +61,12 @@
 
                 <!-- カテゴリー -->
                 <div class="flex flex-wrap gap-2 mb-8">
-                    @if($item->categories->isEmpty())
-                        <p class="text-gray-500">カテゴリーが設定されていません</p>
+                    @if($item->category)
+                        <span class="inline-block px-4 py-1 border border-red-500 text-red-500 bg-red-50 rounded-full text-sm">
+                            {{ $item->category }}
+                        </span>
                     @else
-                        @foreach($item->categories as $category)
-                            <span class="inline-block px-4 py-1 border border-red-500 text-red-500 bg-red-50 rounded-full text-sm">
-                                {{ $category->name }}
-                            </span>
-                        @endforeach
+                        <p class="text-gray-500">カテゴリーが設定されていません</p>
                     @endif
                 </div>
 

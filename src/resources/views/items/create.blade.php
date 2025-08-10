@@ -50,12 +50,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // カテゴリーのチェック
-        const selectedCategories = form.querySelectorAll('input[name="category_ids[]"]:checked');
-        if (selectedCategories.length === 0) {
+        const selectedCategory = form.querySelector('input[name="category"]:checked');
+        if (!selectedCategory) {
             isValid = false;
             const categoryError = document.createElement('p');
             categoryError.className = 'text-red-500 text-sm mt-1';
-            categoryError.textContent = 'カテゴリーを1つ以上選択してください';
+            categoryError.textContent = 'カテゴリーを選択してください';
             form.querySelector('.category-label').parentElement.appendChild(categoryError);
         }
 
@@ -132,49 +132,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="mb-8">
                     <h3 class="text-base mb-4">カテゴリー</h3>
                     <div class="space-y-4 px-4">
-                        <!-- 1行目 -->
                         <div class="flex flex-wrap gap-4">
-                            @foreach(['ファッション', '家電', 'インテリア', 'レディース', 'メンズ', 'コスメ'] as $category)
+                            @foreach($categories as $category)
                                 <label class="category-label">
-                                    <input type="checkbox" 
-                                           name="category_ids[]" 
+                                    <input type="radio" 
+                                           name="category" 
                                            value="{{ $category }}"
                                            class="hidden peer"
-                                           {{ in_array($category, old('category_ids', [])) ? 'checked' : '' }}>
-                                    <span class="inline-block px-6 py-2 rounded-full border border-red-500 text-red-500 text-sm cursor-pointer
-                                               hover:bg-red-50 transition-colors duration-200
-                                               peer-checked:bg-red-500 peer-checked:text-white">
-                                        {{ $category }}
-                                    </span>
-                                </label>
-                            @endforeach
-                        </div>
-                        <!-- 2行目 -->
-                        <div class="flex flex-wrap gap-4">
-                            @foreach(['本', 'ゲーム', 'スポーツ', 'キッチン', 'ハンドメイド', 'アクセサリー'] as $category)
-                                <label class="category-label">
-                                    <input type="checkbox" 
-                                           name="category_ids[]" 
-                                           value="{{ $category }}"
-                                           class="hidden peer"
-                                           {{ in_array($category, old('category_ids', [])) ? 'checked' : '' }}>
-                                    <span class="inline-block px-6 py-2 rounded-full border border-red-500 text-red-500 text-sm cursor-pointer
-                                               hover:bg-red-50 transition-colors duration-200
-                                               peer-checked:bg-red-500 peer-checked:text-white">
-                                        {{ $category }}
-                                    </span>
-                                </label>
-                            @endforeach
-                        </div>
-                        <!-- 3行目 -->
-                        <div class="flex flex-wrap gap-4">
-                            @foreach(['おもちゃ', 'ベビー・キッズ'] as $category)
-                                <label class="category-label">
-                                    <input type="checkbox" 
-                                           name="category_ids[]" 
-                                           value="{{ $category }}"
-                                           class="hidden peer"
-                                           {{ in_array($category, old('category_ids', [])) ? 'checked' : '' }}>
+                                           {{ old('category') == $category ? 'checked' : '' }}>
                                     <span class="inline-block px-6 py-2 rounded-full border border-red-500 text-red-500 text-sm cursor-pointer
                                                hover:bg-red-50 transition-colors duration-200
                                                peer-checked:bg-red-500 peer-checked:text-white">
@@ -184,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             @endforeach
                         </div>
                     </div>
-                    @error('category_ids')
+                    @error('category')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>

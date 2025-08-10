@@ -5,88 +5,110 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Item;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ItemTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_item_list_page_can_be_rendered()
+    public function test_all_items_are_displayed()
     {
+        $items = Item::factory(3)->create();
+
         $response = $this->get('/');
-        $response->assertStatus(200);
+
+        foreach ($items as $item) {
+            $response->assertSee($item->name);
+        }
     }
 
-    public function test_mylist_page_requires_authentication()
+    public function test_purchased_item_shows_sold_status()
     {
-        $response = $this->get('/mylist');
+        $item = Item::factory()->create(['status' => 'sold']);
+
+        $response = $this->get('/');
+
+        $response->assertSee('Sold');
+    }
+
+    public function test_unauthorized_user_cannot_create_item()
+    {
+        $response = $this->get('/sell');
+
         $response->assertRedirect('/login');
     }
 
-    public function test_authenticated_user_can_see_mylist()
+    public function test_mylist_shows_only_user_liked_items()
     {
         $user = User::factory()->create();
-        
-        $response = $this->actingAs($user)->get('/mylist');
-        $response->assertStatus(200);
+        $likedItem = Item::factory()->create(['name' => 'いいねした商品']);
+        $otherItem = Item::factory()->create(['name' => 'いいねしていない商品']);
+
+        // いいねを追加
+        $this->actingAs($user);
+        $this->post("/items/{$likedItem->id}/like");
+
+        $response = $this->get('/mylist');
+
+        $response->assertSee('いいねした商品');
+        $response->assertDontSee('いいねしていない商品');
     }
 
-    public function test_item_detail_page_can_be_rendered()
+    public function test_search_items_by_keyword()
     {
-        $user = User::factory()->create();
-        $item = Item::factory()->create(['user_id' => $user->id]);
+        $item1 = Item::factory()->create(['name' => 'テスト商品A']);
+        $item2 = Item::factory()->create(['name' => '別の商品B']);
+
+        $response = $this->get('/?search=テスト');
+
+        $response->assertSee('テスト商品A');
+        $response->assertDontSee('別の商品B');
+    }
+
+    public function test_search_shows_no_results_message()
+    {
+        Item::factory()->create(['name' => '商品A']);
+
+        $response = $this->get('/?search=存在しない商品名');
+
+        $response->assertSee('検索結果が見つかりません');
+    }
+
+    public function test_recommended_items_are_sorted_by_likes()
+    {
+        $users = User::factory(3)->create();
+        $item1 = Item::factory()->create(['name' => '人気商品']);
+        $item2 = Item::factory()->create(['name' => '普通の商品']);
+
+        // item1に2いいね、item2に1いいね
+        foreach ($users->take(2) as $user) {
+            $this->actingAs($user)->post("/items/{$item1->id}/like");
+        }
+        $this->actingAs($users->last())->post("/items/{$item2->id}/like");
+
+        $response = $this->get('/?mode=recommended');
+
+        $response->assertSeeInOrder(['人気商品', '普通の商品']);
+    }
+
+    public function test_item_detail_shows_all_information()
+    {
+        $item = Item::factory()->create([
+            'name' => 'テスト商品',
+            'description' => '商品の説明',
+            'price' => 1000,
+            'condition' => 'new'
+        ]);
 
         $response = $this->get("/item/{$item->id}");
-        $response->assertStatus(200);
-    }
 
-    public function test_user_can_create_item()
-    {
-        Storage::fake('public');
-        $user = User::factory()->create();
-
-        $response = $this->actingAs($user)->post('/sell', [
-            'name' => 'Test Item',
-            'description' => 'Test Description',
-            'price' => 1000,
-            'image' => UploadedFile::fake()->image('test.jpg'),
+        $response->assertSee([
+            'テスト商品',
+            '商品の説明',
+            '1,000',
+            '新品、未使用'
         ]);
-
-        $response->assertRedirect();
-        $this->assertDatabaseHas('items', [
-            'name' => 'Test Item',
-            'description' => 'Test Description',
-            'price' => 1000,
-            'user_id' => $user->id,
-        ]);
-        Storage::disk('public')->assertExists('items/' . Item::latest()->first()->image_path);
-    }
-
-    public function test_validation_error_when_required_fields_are_empty()
-    {
-        $user = User::factory()->create();
-
-        $response = $this->actingAs($user)->post('/sell', [
-            'name' => '',
-            'description' => '',
-            'price' => '',
-            'image' => '',
-        ]);
-
-        $response->assertSessionHasErrors(['name', 'description', 'price', 'image']);
-    }
-
-    public function test_only_authenticated_users_can_create_items()
-    {
-        $response = $this->post('/sell', [
-            'name' => 'Test Item',
-            'description' => 'Test Description',
-            'price' => 1000,
-            'image' => UploadedFile::fake()->image('test.jpg'),
-        ]);
-
-        $response->assertRedirect('/login');
     }
 } 

@@ -3,8 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Fortify;
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\ContactController;
-use App\Http\Controllers\AdminFormController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\ProfileController;
@@ -64,17 +62,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // PG12: プロフィール画面_出品した商品一覧
     Route::get('/mypage/sales', [ProfileController::class, 'sales'])->name('profile.sales');
     
-    // 管理者用ルート
-    Route::get('/auth/admin', [AdminFormController::class, 'showAdminForm'])->name('showAdmin');
-    Route::get('/auth/admin/search', [AdminFormController::class, 'searchContact'])->name('searchContact');
 });
-
-// お問い合わせ関連
-Route::get('/contact', [ContactController::class, 'showContact'])->name('showContact');
-Route::post('/confirm', [ContactController::class, 'confirm'])->name('confirm');
-Route::post('/thanks', [ContactController::class, 'store'])->name('store');
-Route::get('/contact/export', [AdminFormController::class, 'export'])->name('contact.export');
-Route::delete('/contact/{id}', [AdminFormController::class, 'destroy'])->name('contact.destroy');
 
 Route::post('/items/{item}/comments', [CommentController::class, 'store'])->name('comments.store');
 

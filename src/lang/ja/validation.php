@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'required' => ':attributeは必須項目です。',
-    'email' => ':attributeは有効なメールアドレス形式で入力してください。',
+    'required' => ':attributeを入力してください',
+    'email' => ':attributeを正しい形式で入力してください',
     'unique' => 'この:attributeは既に使用されています。',
     'min' => [
         'string' => ':attributeは:min文字以上で入力してください。',

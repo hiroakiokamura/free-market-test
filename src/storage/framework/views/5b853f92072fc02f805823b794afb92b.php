@@ -16,14 +16,19 @@
         </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <?php $__currentLoopData = $items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+    <?php if($items->isEmpty()): ?>
+        <div class="text-center py-8">
+            <p class="text-gray-600">検索結果が見つかりません</p>
+        </div>
+    <?php else: ?>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <?php $__currentLoopData = $items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <div class="bg-white rounded-lg shadow overflow-hidden relative">
                 <a href="<?php echo e(route('item.show', $item->id)); ?>">
                     <img src="<?php echo e(Storage::url($item->image_path)); ?>" alt="<?php echo e($item->name); ?>" class="w-full h-48 object-cover">
-                    <?php if($item->status === 'sold_out'): ?>
+                    <?php if($item->status === 'sold_out' || $item->status === 'sold'): ?>
                         <div class="absolute top-0 right-0 bg-red-500 text-white px-3 py-1 m-2 rounded-md">
-                            SOLD
+                            Sold
                         </div>
                     <?php endif; ?>
                     <div class="p-4">
@@ -39,12 +44,13 @@
                     </div>
                 </a>
             </div>
-        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-    </div>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        </div>
 
-    <div class="mt-6">
-        <?php echo e($items->links()); ?>
+        <div class="mt-6">
+            <?php echo e($items->links()); ?>
 
-    </div>
+        </div>
+    <?php endif; ?>
 <?php $__env->stopSection(); ?> 
 <?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /var/www/resources/views/items/index.blade.php ENDPATH**/ ?>

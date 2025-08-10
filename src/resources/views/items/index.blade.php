@@ -18,14 +18,19 @@
         </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        @foreach($items as $item)
+    @if($items->isEmpty())
+        <div class="text-center py-8">
+            <p class="text-gray-600">検索結果が見つかりません</p>
+        </div>
+    @else
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            @foreach($items as $item)
             <div class="bg-white rounded-lg shadow overflow-hidden relative">
                 <a href="{{ route('item.show', $item->id) }}">
                     <img src="{{ Storage::url($item->image_path) }}" alt="{{ $item->name }}" class="w-full h-48 object-cover">
-                    @if($item->status === 'sold_out')
+                    @if($item->status === 'sold_out' || $item->status === 'sold')
                         <div class="absolute top-0 right-0 bg-red-500 text-white px-3 py-1 m-2 rounded-md">
-                            SOLD
+                            Sold
                         </div>
                     @endif
                     <div class="p-4">
@@ -41,10 +46,11 @@
                     </div>
                 </a>
             </div>
-        @endforeach
-    </div>
+            @endforeach
+        </div>
 
-    <div class="mt-6">
-        {{ $items->links() }}
-    </div>
+        <div class="mt-6">
+            {{ $items->links() }}
+        </div>
+    @endif
 @endsection 

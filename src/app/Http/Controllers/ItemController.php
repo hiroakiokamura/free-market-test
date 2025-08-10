@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Item;
-use App\Models\Category;
 
 class ItemController extends Controller
 {
@@ -58,7 +57,9 @@ class ItemController extends Controller
      */
     public function mylist()
     {
-        $items = Item::where('user_id', auth()->id())->latest()->paginate(20);
+        $items = Item::whereHas('likes', function($query) {
+            $query->where('user_id', auth()->id());
+        })->latest()->paginate(20);
         return view('items.mylist', compact('items'));
     }
 
@@ -67,7 +68,7 @@ class ItemController extends Controller
      */
     public function show($item_id)
     {
-        $item = Item::with(['categories', 'comments.user'])
+        $item = Item::with(['comments.user'])
             ->withCount(['likes', 'comments'])
             ->findOrFail($item_id);
         return view('items.show', compact('item'));
@@ -78,7 +79,17 @@ class ItemController extends Controller
      */
     public function create()
     {
-        $categories = Category::all();
+        // 予定されたカテゴリー一覧を定義
+        $categories = [
+            'ファッション',
+            '家電・スマホ・カメラ',
+            '食品',
+            'キッチン・日用品',
+            'コスメ・美容',
+            'スポーツ・レジャー',
+            '本・音楽・ゲーム',
+            'その他'
+        ];
         return view('items.create', compact('categories'));
     }
 
@@ -94,20 +105,10 @@ class ItemController extends Controller
             'price' => 'required|numeric|min:1',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'condition' => 'required|in:new,like_new,good,fair,poor',
-            'category_ids' => 'required|array|min:1',
+            'category' => 'required|string',
         ]);
 
         $imagePath = $request->file('image')->store('items', 'public');
-
-        // カテゴリー名を取得
-        $categoryNames = $request->category_ids;
-        
-        // 既存のカテゴリーを取得または新規作成
-        $categoryIds = [];
-        foreach ($categoryNames as $name) {
-            $category = Category::firstOrCreate(['name' => $name]);
-            $categoryIds[] = $category->id;
-        }
 
         $item = Item::create([
             'user_id' => auth()->id(),
@@ -117,11 +118,9 @@ class ItemController extends Controller
             'price' => $request->price,
             'image_path' => $imagePath,
             'condition' => $request->condition,
+            'category' => $request->category,
             'status' => 'on_sale',
         ]);
-
-        // カテゴリーを関連付け
-        $item->categories()->attach($categoryIds);
 
         return redirect()->route('item.show', $item)
             ->with('success', '商品を出品しました。');

@@ -19,8 +19,9 @@ class Item extends Model
         'description',
         'price',
         'image_path',
-        'status', // 'on_sale', 'sold_out'
+        'status', // 'on_sale', 'sold', 'sold_out'
         'condition',
+        'category', // カテゴリ情報を直接保存
     ];
 
     /**
@@ -58,6 +59,9 @@ class Item extends Model
             'good' => '目立った傷や汚れなし',
             'fair' => 'やや傷や汚れあり',
             'poor' => '傷や汚れあり',
+            '新品' => '新品',
+            '良好' => '良好',
+            '傷あり' => '傷あり',
         ][$this->condition] ?? $this->condition;
     }
 
@@ -67,12 +71,11 @@ class Item extends Model
     }
 
     /**
-     * カテゴリーとの多対多リレーション
+     * カテゴリー情報を取得（文字列として直接保存）
      */
-    public function categories()
+    public function getCategoryAttribute($value)
     {
-        return $this->belongsToMany(Category::class, 'item_categories')
-                    ->withTimestamps();
+        return $value;
     }
 
     public function comments(): HasMany
