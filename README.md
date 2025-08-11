@@ -57,7 +57,7 @@ sudo chmod -R 777 *
 ## データベース構造
 
 ### ER図
-![ER図](storage/app/public/images/docs/er-diagram.png)
+![ER図](src/storage/app/public/images/docs/er-diagram.png)
 
 以下はER図のMermaid記法での定義です：
 
