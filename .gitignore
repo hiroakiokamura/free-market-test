@@ -20,4 +20,26 @@ yarn-error.log
 .DS_Store
 
 # Docker volumes
-/docker/mysql/data/ 
+/docker/mysql/data/*
+!/docker/mysql/data/.gitkeep
+
+# 誤って作成されたコマンドファイル
+*exec*app*php*artisan*
+e\ exec\ app\ php\ artisan*
+
+# OS固有ファイル
+Thumbs.db
+*.tmp
+*.temp
+
+# IDEファイル
+*.swp
+*.swo
+*~
+
+# ログファイル（追加）
+*.log
+
+# バックアップファイル
+*.bak
+*.backup 

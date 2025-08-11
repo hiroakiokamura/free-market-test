@@ -5,6 +5,7 @@
 /public/storage
 /storage/*.key
 /vendor
+.env
 .env.backup
 .env.production
 .phpunit.result.cache
@@ -16,3 +17,33 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+
+# Storage関連（詳細）
+/storage/framework/cache/*
+!/storage/framework/cache/.gitignore
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitignore
+/storage/framework/testing/*
+!/storage/framework/testing/.gitignore
+/storage/framework/views/*
+!/storage/framework/views/.gitignore
+/storage/logs/*
+!/storage/logs/.gitignore
+/storage/app/public/items/*
+!/storage/app/public/items/.gitignore
+/storage/app/public/profile-photos/*
+!/storage/app/public/profile-photos/.gitignore
+
+# Laravel Mix / Vite
+/public/mix-manifest.json
+/public/js
+/public/css
+
+# テスト関連
+/.phpunit.cache
+/tests/coverage
+/coverage
+
+# 一時ファイル
+*.tmp
+*.temp
