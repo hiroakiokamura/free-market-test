@@ -5,8 +5,8 @@
 ### Laravel環境構築
 ```bash
 # 1. リポジトリのクローン
-git clone git@github.com:hiroakiokamura/freemarket-test1.git
-cd freemarket-test1
+git clone git@github.com:hiroakiokamura/free-market-test.git
+cd free-market-test
 
 # 2. Docker環境の起動
 docker-compose up -d --build
